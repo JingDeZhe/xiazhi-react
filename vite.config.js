@@ -1,3 +1,4 @@
+import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import UnoCSS from 'unocss/vite'
@@ -14,9 +15,17 @@ export default defineConfig({
         'react',
         {
           classnames: [['default', 'cls']],
+          'overlayscrollbars-react': [
+            ['OverlayScrollbarsComponent', 'Scrollbar'],
+          ],
         },
       ],
       dts: './auto-imports.d.ts',
     }),
   ],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
 })

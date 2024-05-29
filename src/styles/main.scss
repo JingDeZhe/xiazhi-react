@@ -11,3 +11,15 @@ body,
 .all-center {
   --at-apply: flex flex-col items-center justify-center;
 }
+
+.v-center {
+  --at-apply: flex items-center gap-1;
+}
+
+.col-ctn {
+  --at-apply: flex flex-col;
+}
+
+.ctn-body {
+  --at-apply: flex-1 overflow-hidden;
+}

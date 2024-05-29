@@ -1,5 +1,7 @@
 import 'virtual:uno.css'
+import 'overlayscrollbars/overlayscrollbars.css'
 import './styles/main.scss'
+
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'

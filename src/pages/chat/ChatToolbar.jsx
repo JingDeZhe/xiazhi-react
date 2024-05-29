@@ -1,5 +1,5 @@
 import { Button, Popover } from 'antd'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 export const ChatToolbar = () => {
   const navigate = useNavigate()
@@ -21,7 +21,12 @@ export const ChatToolbar = () => {
     },
   ]
 
-  const [activeModule, setActiveModule] = useState('')
+  const location = useLocation()
+  const activeCategory = categories.find(
+    (d) => location.pathname.indexOf(d.route) !== -1
+  )
+
+  const [activeModule, setActiveModule] = useState(activeCategory?.route || '')
   const handleSelectModule = (mod) => {
     setActiveModule(mod.route)
     navigate(`./${mod.route}`)

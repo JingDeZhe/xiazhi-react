@@ -19,4 +19,15 @@
       }
     }
   }
+
+  .chat-talk {
+    --at-apply: grid grid-cols-[240px_1fr];
+  }
+
+  .talk-menu {
+    --at-apply: bg-neutral-200 border-r-(1 solid) border-neutral-300;
+    &-search {
+      --at-apply: p-2 pt-5 bg-neutral-100;
+    }
+  }
 }

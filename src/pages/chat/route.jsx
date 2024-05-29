@@ -1,4 +1,6 @@
-import { Talk } from './Talk'
+import { AddressBook } from './AddressBook'
+import { Moment } from './Moment'
+import { Talk, talkLoader } from './Talk'
 import { Chat } from './main'
 
 /**
@@ -11,6 +13,15 @@ export const chatRoute = {
     {
       path: 'talk',
       element: <Talk />,
+      loader: talkLoader,
+    },
+    {
+      path: 'address-book',
+      element: <AddressBook />,
+    },
+    {
+      path: 'moment',
+      element: <Moment />,
     },
   ],
 }
