@@ -1,0 +1,13 @@
+html,
+body,
+#root {
+  --at-apply: h-full p-0 m-0 overflow-auto;
+}
+
+.full-ctn {
+  --at-apply: h-full overflow-hidden;
+}
+
+.all-center {
+  --at-apply: flex flex-col items-center justify-center;
+}

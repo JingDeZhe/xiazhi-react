@@ -20,5 +20,9 @@ export default defineConfig({
 })
 
 function getSafeList() {
-  return []
+  return [
+    'i-tabler-message-circle',
+    'i-tabler-address-book',
+    'i-tabler-circles',
+  ]
 }

@@ -1,0 +1,22 @@
+.chat {
+  &-ctn {
+    --at-apply: h-full w-full flex flex-col items-center justify-center;
+  }
+
+  --at-apply: h-[700px] w-[900px] bg-neutral-100 shadow grid;
+  grid-template-columns: max-content 1fr;
+
+  &-toolbar {
+    --at-apply: flex flex-col gap-1 p-2 bg-dark-500 text-white;
+    .module-item {
+      --at-apply: w-[40px] h-[40px] flex items-center justify-center text-2xl
+        cursor-pointer rounded transition;
+      &:hover {
+        --at-apply: bg-orange-300;
+      }
+      &.active {
+        --at-apply: bg-orange-400;
+      }
+    }
+  }
+}
