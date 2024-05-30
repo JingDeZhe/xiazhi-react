@@ -3,7 +3,7 @@
     --at-apply: h-full w-full flex flex-col items-center justify-center;
   }
 
-  --at-apply: h-[700px] w-[900px] bg-neutral-100 shadow grid;
+  --at-apply: h-[700px] w-[900px] bg-neutral-100 shadow grid overflow-hidden;
   grid-template-columns: max-content 1fr;
 
   &-toolbar {
@@ -21,13 +21,30 @@
   }
 
   .chat-talk {
-    --at-apply: grid grid-cols-[240px_1fr];
+    --at-apply: grid grid-cols-[240px_1fr] overflow-hidden;
   }
 
   .talk-menu {
     --at-apply: bg-neutral-200 border-r-(1 solid) border-neutral-300;
     &-search {
       --at-apply: p-2 pt-5 bg-neutral-100;
+    }
+
+    .text-fade-1 {
+      --at-apply: text-sm text-slate-600;
+    }
+    .text-fade-2 {
+      --at-apply: text-xs text-slate-400;
+    }
+  }
+
+  .avatar-info {
+    --at-apply: flex items-center gap-2 p-2;
+    .avatar {
+      --at-apply: w-[50px] h-[50px] object-cover rounded;
+    }
+    .info {
+      --at-apply: self-stretch flex-1 flex flex-col justify-around;
     }
   }
 }

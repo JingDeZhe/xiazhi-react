@@ -9,17 +9,28 @@ export const TalkMenu = ({ items }) => {
           <i className="i-tabler-plus"></i>
         </Button>
       </div>
-      <div className="ctn-body">
-        <Scrollbar>
-          {items.map((d) => {
-            return (
-              <div className="talk-menu-item" key={d.id}>
-                <div>{d.nickname}</div>
+      <Scrollbar
+        className="full-ctn"
+        options={{ scrollbars: { autoHide: 'scroll', autoHideDelay: 500 } }}
+        defer
+      >
+        {items.map((d) => {
+          return (
+            <div className="avatar-info" key={d.id}>
+              <img className="avatar" src={d.avatar} />
+              <div className="info">
+                <div className="flex gap-2">
+                  <span className="flex-1">{d.nickname}</span>
+                  <span className="text-fade-2 truncate mr-1">
+                    {d.lastMessageTime}
+                  </span>
+                </div>
+                <div className="text-fade-1">{d.lastMessage}</div>
               </div>
-            )
-          })}
-        </Scrollbar>
-      </div>
+            </div>
+          )
+        })}
+      </Scrollbar>
     </div>
   )
 }
