@@ -1,16 +1,22 @@
 import { useLoaderData } from 'react-router-dom'
 import { TalkMenu } from './TalkMenu'
-import { fmtHumanTime, randTime, uid } from '@/utils/main'
+import {
+  fmtHumanTime,
+  randomAvatar,
+  randomName,
+  randomTime,
+  uid,
+} from '@/utils/main'
 
 export const talkLoader = async () => {
   return new Array(20)
     .fill()
     .map((_, idx) => {
-      const t = randTime(10)
+      const t = randomTime(10)
       return {
         id: uid(),
-        nickname: `张三${idx}`,
-        avatar: '/img/avatar-0.jpg',
+        nickname: randomName(Math.random() < 0.5 ? 1 : 2),
+        avatar: randomAvatar(idx + 1),
         lastMessage: '早上好呀🤠',
         lastMessageTime: fmtHumanTime(t),
         lastMessageTime0: t,
