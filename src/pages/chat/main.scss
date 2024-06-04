@@ -39,7 +39,13 @@
   }
 
   .avatar-info {
-    --at-apply: flex items-center gap-2 p-2;
+    --at-apply: flex items-center gap-2 p-2 cursor-default;
+    &:hover {
+      --at-apply: bg-neutral-300;
+    }
+    &.active {
+      --at-apply: bg-zinc-300;
+    }
     .avatar {
       --at-apply: w-[50px] h-[50px] object-cover rounded;
     }

@@ -18,12 +18,15 @@
     "nanoid": "^5.0.7",
     "overlayscrollbars": "^2.8.3",
     "overlayscrollbars-react": "^0.5.6",
+    "pinyin": "4.0.0-alpha.0",
+    "pinyin-engine": "^1.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.1"
   },
   "devDependencies": {
     "@iconify-json/tabler": "^1.1.113",
+    "@types/pinyin-engine": "^1.1.2",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@unocss/transformer-compile-class": "^0.60.3",
