@@ -2,22 +2,37 @@ import { useRequest } from 'ahooks'
 import { server } from './db/server'
 import { useChatStore } from './store/main'
 import Split from 'react-split'
+import { MessageInput } from './MessageInput'
 
 export const TalkContent = ({ contactId }) => {
   const user = useChatStore((s) => s.user)
-  const { data: contact, error } = useRequest(
+  const { data: contact } = useRequest(
     () => {
       return server.getUser(contactId)
     },
     { refreshDeps: [contactId] }
   )
-  const { data: messages } = useRequest(
+
+  const scrollbar = useRef(null)
+  const { data: messages, refresh: refreshMessage } = useRequest(
     () => {
       if (!user?.id) return []
       return server.getMessages(user.id, contactId)
     },
     { refreshDeps: [contactId, user] }
   )
+
+  useEffect(() => {
+    if (scrollbar.current) {
+      const { viewport } = scrollbar.current.osInstance().elements()
+      viewport.scrollTop = viewport.scrollHeight
+    }
+  }, [messages])
+
+  const handleSendMessage = (message) => {
+    server.sendMessage(user.id, contactId, message).then(refreshMessage)
+  }
+
   return (
     <div className="talk-content col-ctn">
       {contact ? (
@@ -36,7 +51,13 @@ export const TalkContent = ({ contactId }) => {
             className="split ctn-body"
             cursor="/img/row-resize.png"
           >
-            <div className="content">
+            <Scrollbar
+              options={{
+                scrollbars: { autoHide: 'scroll', autoHideDelay: 500 },
+              }}
+              className="content"
+              ref={scrollbar}
+            >
               {messages.map((d) => {
                 return (
                   <div className={cls('message', d.type)} key={d.id}>
@@ -50,8 +71,10 @@ export const TalkContent = ({ contactId }) => {
                   </div>
                 )
               })}
+            </Scrollbar>
+            <div className="footer">
+              <MessageInput onSend={handleSendMessage}></MessageInput>
             </div>
-            <div className="footer"></div>
           </Split>
         </>
       ) : (

@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emoji-mart/data": "^1.2.1",
+    "@emoji-mart/react": "^1.1.1",
     "@lotusloli/random-names": "^0.0.1",
     "ahooks": "^3.8.0",
     "antd": "^5.17.4",
@@ -17,6 +19,7 @@
     "dayjs": "^1.11.11",
     "dexie": "^4.0.7",
     "dexie-react-hooks": "^1.1.7",
+    "emoji-mart": "^5.6.0",
     "idb-keyval": "^6.2.1",
     "nanoid": "^5.0.7",
     "overlayscrollbars": "^2.8.3",
@@ -30,6 +33,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@iconify-json/fluent-emoji-flat": "^1.1.16",
     "@iconify-json/tabler": "^1.1.113",
     "@types/pinyin-engine": "^1.1.2",
     "@types/react": "^18.2.66",

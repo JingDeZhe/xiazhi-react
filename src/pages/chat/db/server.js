@@ -28,6 +28,15 @@ class FakeServer {
       return [...a, ...b].sort((a, b) => a.time - b.time)
     })
   }
+
+  async sendMessage(fromId, targetId, message) {
+    return this.db.messages.put({
+      fromId,
+      targetId,
+      message,
+      time: Date.now(),
+    })
+  }
 }
 
 export const server = new FakeServer()

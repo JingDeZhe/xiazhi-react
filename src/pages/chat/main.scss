@@ -49,7 +49,7 @@
       --at-apply: p-4;
     }
     .message {
-      --at-apply: flex gap-3;
+      --at-apply: flex gap-3 mb-3 items-start;
       &.self {
         --at-apply: flex-row-reverse;
       }
@@ -57,17 +57,41 @@
         --at-apply: w-[50px] h-[50px] object-cover rounded;
       }
       &-content {
-        --at-apply: p-2 rounded text-dark;
+        --at-apply: p-2 rounded text-dark relative shadow-sm whitespace-pre-wrap
+          max-w-[60%];
         &.self {
           --at-apply: bg-[#89D961];
+          &::after {
+            content: '';
+            position: absolute;
+            top: 0.3rem;
+            right: -0.75rem;
+            border: 0.4rem solid transparent;
+            border-left-color: #89d961;
+          }
         }
         &.target {
           --at-apply: bg-[#fff];
+          &::after {
+            content: '';
+            position: absolute;
+            top: 0.3rem;
+            left: -0.75rem;
+            border: 0.4rem solid transparent;
+            border-right-color: #fff;
+          }
         }
       }
     }
     .footer {
-      --at-apply: px-4 border-t border-t-solid border-neutral-200;
+      --at-apply: border-t border-t-solid border-neutral-200;
+    }
+  }
+
+  .message-input {
+    --at-apply: p-4;
+    &-tools {
+      --at-apply: text-2xl;
     }
   }
 
