@@ -41,3 +41,9 @@ body,
     cursor: url('/img/row-resize.png') 8 4, row-resize;
   }
 }
+
+.full-spin {
+  > .ant-spin-container {
+    --at-apply: h-full overflow-hidden;
+  }
+}

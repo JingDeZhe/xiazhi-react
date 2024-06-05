@@ -1,3 +1,4 @@
+import { chatWithOther } from './ai'
 import { db } from './main'
 
 class FakeServer {
@@ -19,23 +20,38 @@ class FakeServer {
   }
 
   async getMessages(fromId, targetId) {
+    if (!fromId || !targetId) return []
     return Promise.all([
       this.db.messages.where({ fromId, targetId }).toArray(),
       this.db.messages.where({ fromId: targetId, targetId: fromId }).toArray(),
-    ]).then(([a, b]) => {
-      a.forEach((d) => (d.type = 'self'))
-      b.forEach((d) => (d.type = 'target'))
-      return [...a, ...b].sort((a, b) => a.time - b.time)
-    })
+    ])
+      .then(([a, b]) => {
+        a.forEach((d) => (d.type = 'self'))
+        b.forEach((d) => (d.type = 'target'))
+        return [...a, ...b].sort((a, b) => a.time - b.time)
+      })
+      .catch(() => {
+        return []
+      })
   }
 
   async sendMessage(fromId, targetId, message) {
-    return this.db.messages.put({
-      fromId,
-      targetId,
-      message,
-      time: Date.now(),
-    })
+    return Promise.all([
+      this.db.messages.put({
+        fromId,
+        targetId,
+        message,
+        time: Date.now(),
+      }),
+      chatWithOther(message).then((res) => {
+        return this.db.messages.put({
+          fromId: targetId,
+          targetId: fromId,
+          message: res,
+          time: Date.now() + 10,
+        })
+      }),
+    ])
   }
 }
 
