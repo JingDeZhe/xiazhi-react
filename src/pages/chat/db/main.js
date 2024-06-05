@@ -15,8 +15,8 @@ export const db = new Dexie('chatDB')
 
 db.version(1).stores({
   users: '&id,username,nickname',
-  relations: '++id,fromId,targetId,alias',
-  messages: '++id,fromId,targetId,time',
+  relations: '++id,[fromId+targetId],fromId,targetId,alias',
+  messages: '++id,[fromId+targetId],fromId,targetId,time',
 })
 window.db = db
 
@@ -36,7 +36,7 @@ async function prepareFakeStore() {
       id: uid(),
       username: pinyin(name),
       nickname: name,
-      avatar: randomAvatar(randomInt(100)),
+      avatar: randomAvatar(randomInt(100 - 1)),
       lastMessage: '早上好呀',
       lastMessageTime: fmtHumanTime(t),
       lastMessageTime0: t,
@@ -57,7 +57,7 @@ async function prepareFakeStore() {
         fromId: user.id,
         targetId: user2.id,
         time: randomTime(),
-        message: `你好，${user2.nickname},我是${user.nickname}`,
+        message: `你好，${user2.nickname}，我是${user.nickname}`,
       })
     }
   }

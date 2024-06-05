@@ -69,3 +69,15 @@ export const sessionGet = (k) => {
 export const sessionDel = (k) => {
   sessionStorage.removeItem(k)
 }
+
+export const localSet = (k, v) => {
+  localStorage.setItem(k, v)
+}
+
+export const localGet = (k) => {
+  return localStorage.getItem(k)
+}
+
+export const localDel = (k) => {
+  localStorage.removeItem(k)
+}

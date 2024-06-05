@@ -21,7 +21,7 @@ export const TalkMenu = ({ items, contactId, onSelect }) => {
         </Button>
       </div>
       <Scrollbar
-        className="full-ctn"
+        className="ctn-body"
         options={{ scrollbars: { autoHide: 'scroll', autoHideDelay: 500 } }}
         defer
       >

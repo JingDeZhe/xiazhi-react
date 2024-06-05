@@ -17,6 +17,17 @@ class FakeServer {
   async getUser(id) {
     return this.db.users.get(id)
   }
+
+  async getMessages(fromId, targetId) {
+    return Promise.all([
+      this.db.messages.where({ fromId, targetId }).toArray(),
+      this.db.messages.where({ fromId: targetId, targetId: fromId }).toArray(),
+    ]).then(([a, b]) => {
+      a.forEach((d) => (d.type = 'self'))
+      b.forEach((d) => (d.type = 'target'))
+      return [...a, ...b].sort((a, b) => a.time - b.time)
+    })
+  }
 }
 
 export const server = new FakeServer()

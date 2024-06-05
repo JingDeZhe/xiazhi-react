@@ -24,10 +24,12 @@
     --at-apply: grid grid-cols-[240px_1fr] overflow-hidden;
   }
 
+  --header-height: 3.5rem;
   .talk-menu {
     --at-apply: bg-neutral-200 border-r-(1 solid) border-neutral-300;
     &-search {
-      --at-apply: p-2 pt-5 bg-neutral-100;
+      --at-apply: px-2 bg-neutral-100;
+      height: var(--header-height);
     }
 
     .text-fade-1 {
@@ -35,6 +37,37 @@
     }
     .text-fade-2 {
       --at-apply: text-xs text-slate-400;
+    }
+  }
+
+  .talk-content {
+    .header {
+      --at-apply: px-4 border-b border-b-solid border-neutral-200;
+      height: var(--header-height);
+    }
+    .content {
+      --at-apply: p-4;
+    }
+    .message {
+      --at-apply: flex gap-3;
+      &.self {
+        --at-apply: flex-row-reverse;
+      }
+      &-avatar {
+        --at-apply: w-[50px] h-[50px] object-cover rounded;
+      }
+      &-content {
+        --at-apply: p-2 rounded text-dark;
+        &.self {
+          --at-apply: bg-[#89D961];
+        }
+        &.target {
+          --at-apply: bg-[#fff];
+        }
+      }
+    }
+    .footer {
+      --at-apply: px-4 border-t border-t-solid border-neutral-200;
     }
   }
 
