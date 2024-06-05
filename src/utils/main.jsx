@@ -2,6 +2,7 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { nanoid } from 'nanoid'
 export { randomName } from '@lotusloli/random-names'
+export { set as kySet, get as kyGet, clear as kyClear } from 'idb-keyval'
 
 const DAY_MS = 24 * 60 * 60 * 1000
 

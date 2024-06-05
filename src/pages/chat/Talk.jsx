@@ -1,31 +1,10 @@
 import { useLoaderData } from 'react-router-dom'
 import { TalkMenu } from './TalkMenu'
-import {
-  fmtHumanTime,
-  random,
-  randomAvatar,
-  randomInt,
-  randomName,
-  randomTime,
-  uid,
-} from '@/utils/main'
 import { TalkContent } from './TalkContent'
+import { server } from './db/server'
 
-export const talkLoader = async () => {
-  return new Array(20)
-    .fill()
-    .map((_, idx) => {
-      const t = randomTime(10)
-      return {
-        id: uid(),
-        nickname: randomName(random() < 0.5 ? 1 : 2),
-        avatar: randomAvatar(randomInt(100)),
-        lastMessage: '早上好呀',
-        lastMessageTime: fmtHumanTime(t),
-        lastMessageTime0: t,
-      }
-    })
-    .sort((a, b) => b.lastMessageTime0 - a.lastMessageTime0)
+export const talkLoader = async ({ params }) => {
+  return server.getContacts(params.userId)
 }
 
 export const Talk = () => {
@@ -34,7 +13,6 @@ export const Talk = () => {
   const handleSelectItem = (id) => {
     setActiveId(id)
   }
-  const activeItem = items.find((d) => d.id === activeId)
   return (
     <div className="chat-talk">
       <TalkMenu
