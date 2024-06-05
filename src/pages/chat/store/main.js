@@ -2,8 +2,8 @@ import { create } from 'zustand'
 
 export const useChatStore = create((set) => {
   return {
-    userId: '',
-    setUserId: (v) => set({ userId: v }),
+    user: {},
+    setUser: (d) => set({ user: d }),
   }
 })
 

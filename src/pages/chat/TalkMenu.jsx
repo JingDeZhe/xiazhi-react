@@ -1,7 +1,7 @@
 import { Button, Input } from 'antd'
 import PinyinEngine from 'pinyin-engine'
 
-export const TalkMenu = ({ items, activeId, onSelect }) => {
+export const TalkMenu = ({ items, contactId, onSelect }) => {
   const [queryText, setQueryText] = useState('')
 
   const engine = useMemo(() => {
@@ -28,7 +28,7 @@ export const TalkMenu = ({ items, activeId, onSelect }) => {
         {filteredItems.map((d) => {
           return (
             <div
-              className={cls('avatar-info', { active: activeId === d.id })}
+              className={cls('avatar-info', { active: contactId === d.id })}
               key={d.id}
               onClick={() => onSelect(d.id)}
             >

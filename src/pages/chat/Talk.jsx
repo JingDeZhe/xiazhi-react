@@ -2,25 +2,38 @@ import { useLoaderData } from 'react-router-dom'
 import { TalkMenu } from './TalkMenu'
 import { TalkContent } from './TalkContent'
 import { server } from './db/server'
+import { sessionDel, sessionGet, sessionSet } from '@/utils/main'
 
 export const talkLoader = async ({ params }) => {
   return server.getContacts(params.userId)
 }
 
+const LAST_CONTACT_ID = 'LAST_CONTACT_ID'
 export const Talk = () => {
   const items = useLoaderData()
-  const [activeId, setActiveId] = useState('')
+
+  const getLastContactId = () => {
+    const id = sessionGet(LAST_CONTACT_ID)
+    if (id) {
+      if (items.find((d) => d.id === id)) return id
+      sessionDel(LAST_CONTACT_ID)
+    }
+    return ''
+  }
+
+  const [contactId, setContactId] = useState(getLastContactId)
   const handleSelectItem = (id) => {
-    setActiveId(id)
+    sessionSet(LAST_CONTACT_ID, id)
+    setContactId(id)
   }
   return (
     <div className="chat-talk">
       <TalkMenu
         items={items}
-        activeId={activeId}
+        contactId={contactId}
         onSelect={handleSelectItem}
       ></TalkMenu>
-      <TalkContent targetId={activeId}></TalkContent>
+      <TalkContent contactId={contactId}></TalkContent>
     </div>
   )
 }

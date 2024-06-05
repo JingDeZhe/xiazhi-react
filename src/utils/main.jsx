@@ -2,7 +2,12 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { nanoid } from 'nanoid'
 export { randomName } from '@lotusloli/random-names'
-export { set as kySet, get as kyGet, clear as kyClear } from 'idb-keyval'
+export {
+  set as kySet,
+  get as kyGet,
+  clear as kyClear,
+  del as kyDel,
+} from 'idb-keyval'
 
 const DAY_MS = 24 * 60 * 60 * 1000
 
@@ -51,4 +56,16 @@ export const randomInt = (a = 1, b = 0) => {
   const lower = Math.ceil(Math.min(a, b))
   const upper = Math.floor(Math.max(a, b))
   return Math.floor(lower + Math.random() * (upper - lower + 1))
+}
+
+export const sessionSet = (k, v) => {
+  sessionStorage.setItem(k, v)
+}
+
+export const sessionGet = (k) => {
+  return sessionStorage.getItem(k)
+}
+
+export const sessionDel = (k) => {
+  sessionStorage.removeItem(k)
 }
