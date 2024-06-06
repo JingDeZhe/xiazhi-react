@@ -6,7 +6,7 @@ import { MessageInput } from './MessageInput'
 import { Spin } from 'antd'
 import { MessageManage } from './MessageManage'
 
-export const TalkContent = ({ contactId }) => {
+export const TalkContent = ({ targetId }) => {
   const user = useChatStore((s) => s.user)
   const [contact, setContact] = useState(null)
   const [messages, setMessages] = useState([])
@@ -15,13 +15,13 @@ export const TalkContent = ({ contactId }) => {
   const scrollbar = useRef(null)
 
   const refreshMessages = () => {
-    return server.getMessages(user.id, contactId).then(setMessages)
+    return server.getMessages(user.id, targetId).then(setMessages)
   }
   useEffect(() => {
     if (!user?.id) return
-    server.getUser(contactId).then(setContact)
+    server.getUser(targetId).then(setContact)
     refreshMessages()
-  }, [user, contactId])
+  }, [user, targetId])
 
   useEffect(() => {
     if (scrollbar.current) {
@@ -32,9 +32,9 @@ export const TalkContent = ({ contactId }) => {
 
   const handleSendMessage = (message) => {
     setLoading(true)
-    server.sendMessage(user.id, contactId, message).then(() => {
+    server.sendMessage(user.id, targetId, message).then(() => {
       server
-        .getMessages(user.id, contactId)
+        .getMessages(user.id, targetId)
         .then(setMessages)
         .then(() => {
           setLoading(false)
@@ -120,7 +120,7 @@ export const TalkContent = ({ contactId }) => {
       {messageManageVisible && (
         <MessageManage
           fromId={user.id}
-          targetId={contactId}
+          targetId={targetId}
           onClose={handleCloseMessageManage}
         ></MessageManage>
       )}

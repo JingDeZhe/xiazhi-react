@@ -4,11 +4,11 @@ import { Menu, Item, useContextMenu } from 'react-contexify'
 import { EditCharacter } from './EditCharacter'
 import { useParams } from 'react-router-dom'
 
-export const TalkMenu = ({ items, contactId, onSelect }) => {
+export const TalkMenu = ({ items, targetId, onSelect }) => {
   const { userId } = useParams()
   const [queryText, setQueryText] = useState('')
   const [editCharacterVisible, setEditCharacterVisible] = useState(false)
-  const [menuContactId, setMenuContactId] = useState(null)
+  const [menuTargetId, setMenuTargetId] = useState(null)
 
   const engine = useMemo(() => {
     return new PinyinEngine(items, ['nickname'])
@@ -22,14 +22,14 @@ export const TalkMenu = ({ items, contactId, onSelect }) => {
   const { show: showContactMenu } = useContextMenu({
     id: CONTACT_MENU,
   })
-  let _menuContactId = ''
+  let _menuTargetId = ''
   const handleContactMenu = (e) => {
-    _menuContactId = e.currentTarget.dataset.id
+    _menuTargetId = e.currentTarget.dataset.id
     showContactMenu({ event: e })
   }
   const handleContactMenuClick = ({ id }) => {
     if (id === 'editCharacter') {
-      setMenuContactId(_menuContactId)
+      setMenuTargetId(_menuTargetId)
       setEditCharacterVisible(true)
     }
   }
@@ -50,7 +50,7 @@ export const TalkMenu = ({ items, contactId, onSelect }) => {
         {filteredItems.map((d) => {
           return (
             <div
-              className={cls('avatar-info', { active: contactId === d.id })}
+              className={cls('avatar-info', { active: targetId === d.id })}
               key={d.id}
               onClick={() => onSelect(d.id)}
               onContextMenu={handleContactMenu}
@@ -83,7 +83,7 @@ export const TalkMenu = ({ items, contactId, onSelect }) => {
       {editCharacterVisible && (
         <EditCharacter
           fromId={userId}
-          targetId={menuContactId}
+          targetId={menuTargetId}
           onClose={() => setEditCharacterVisible(false)}
         ></EditCharacter>
       )}

@@ -8,32 +8,32 @@ export const talkLoader = async ({ params }) => {
   return server.getContacts(params.userId)
 }
 
-const LAST_CONTACT_ID = 'LAST_CONTACT_ID'
+const LAST_TARGET_ID = 'LAST_TARGET_ID'
 export const Talk = () => {
   const items = useLoaderData()
 
-  const getLastContactId = () => {
-    const id = sessionGet(LAST_CONTACT_ID)
+  const getLastTargetId = () => {
+    const id = sessionGet(LAST_TARGET_ID)
     if (id) {
       if (items.find((d) => d.id === id)) return id
-      sessionDel(LAST_CONTACT_ID)
+      sessionDel(LAST_TARGET_ID)
     }
     return ''
   }
 
-  const [contactId, setContactId] = useState(getLastContactId)
+  const [targetId, setTargetId] = useState(getLastTargetId)
   const handleSelectItem = (id) => {
-    sessionSet(LAST_CONTACT_ID, id)
-    setContactId(id)
+    sessionSet(LAST_TARGET_ID, id)
+    setTargetId(id)
   }
   return (
     <div className="chat-talk">
       <TalkMenu
         items={items}
-        contactId={contactId}
+        targetId={targetId}
         onSelect={handleSelectItem}
       ></TalkMenu>
-      <TalkContent contactId={contactId}></TalkContent>
+      <TalkContent targetId={targetId}></TalkContent>
     </div>
   )
 }
