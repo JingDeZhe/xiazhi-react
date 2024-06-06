@@ -92,7 +92,17 @@
     --at-apply: p-4;
     &-tools {
       --at-apply: text-2xl;
+      > i {
+        --at-apply: transition cursor-pointer;
+        &:hover {
+          --at-apply: text-orange;
+        }
+      }
     }
+  }
+
+  .message-manage {
+    --at-apply: w-[500px] h-[600px];
   }
 
   .avatar-info {
@@ -109,5 +119,19 @@
     .info {
       --at-apply: self-stretch flex-1 flex flex-col justify-around;
     }
+  }
+
+  .edit-character {
+    --at-apply: w-[300px];
+    textarea {
+      --at-apply: resize-none;
+    }
+  }
+
+  .react-draggable {
+    --at-apply: bg-white shadow rounded border-t-2 border-t-orange
+      border-t-solid;
+    z-index: 1000;
+    position: fixed;
   }
 }

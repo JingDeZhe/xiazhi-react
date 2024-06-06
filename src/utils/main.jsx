@@ -71,11 +71,15 @@ export const sessionDel = (k) => {
 }
 
 export const localSet = (k, v) => {
-  localStorage.setItem(k, v)
+  localStorage.setItem(k, JSON.stringify(v))
 }
 
 export const localGet = (k) => {
-  return localStorage.getItem(k)
+  try {
+    return JSON.parse(localStorage.getItem(k))
+  } catch (err) {
+    return
+  }
 }
 
 export const localDel = (k) => {

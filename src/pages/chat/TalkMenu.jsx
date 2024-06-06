@@ -1,8 +1,14 @@
 import { Button, Input } from 'antd'
 import PinyinEngine from 'pinyin-engine'
+import { Menu, Item, useContextMenu } from 'react-contexify'
+import { EditCharacter } from './EditCharacter'
+import { useParams } from 'react-router-dom'
 
 export const TalkMenu = ({ items, contactId, onSelect }) => {
+  const { userId } = useParams()
   const [queryText, setQueryText] = useState('')
+  const [editCharacterVisible, setEditCharacterVisible] = useState(false)
+  const [menuContactId, setMenuContactId] = useState(null)
 
   const engine = useMemo(() => {
     return new PinyinEngine(items, ['nickname'])
@@ -11,6 +17,22 @@ export const TalkMenu = ({ items, contactId, onSelect }) => {
     setQueryText(e.target.value)
   }
   const filteredItems = engine.query(queryText)
+
+  const CONTACT_MENU = 'CONTACT_MENU'
+  const { show: showContactMenu } = useContextMenu({
+    id: CONTACT_MENU,
+  })
+  let _menuContactId = ''
+  const handleContactMenu = (e) => {
+    _menuContactId = e.currentTarget.dataset.id
+    showContactMenu({ event: e })
+  }
+  const handleContactMenuClick = ({ id }) => {
+    if (id === 'editCharacter') {
+      setMenuContactId(_menuContactId)
+      setEditCharacterVisible(true)
+    }
+  }
 
   return (
     <div className="talk-menu col-ctn">
@@ -31,6 +53,8 @@ export const TalkMenu = ({ items, contactId, onSelect }) => {
               className={cls('avatar-info', { active: contactId === d.id })}
               key={d.id}
               onClick={() => onSelect(d.id)}
+              onContextMenu={handleContactMenu}
+              data-id={d.id}
             >
               <img className="avatar" src={d.avatar} />
               <div className="info">
@@ -46,6 +70,23 @@ export const TalkMenu = ({ items, contactId, onSelect }) => {
           )
         })}
       </Scrollbar>
+
+      <Menu id={CONTACT_MENU}>
+        <Item id="editCharacter" onClick={handleContactMenuClick}>
+          Edit Character
+        </Item>
+        <Item id="remove" onClick={handleContactMenuClick}>
+          Remove
+        </Item>
+      </Menu>
+
+      {editCharacterVisible && (
+        <EditCharacter
+          fromId={userId}
+          targetId={menuContactId}
+          onClose={() => setEditCharacterVisible(false)}
+        ></EditCharacter>
+      )}
     </div>
   )
 }

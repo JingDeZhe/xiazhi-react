@@ -43,15 +43,35 @@ class FakeServer {
         message,
         time: Date.now(),
       }),
-      chatWithOther(message).then((res) => {
-        return this.db.messages.put({
-          fromId: targetId,
-          targetId: fromId,
-          message: res,
-          time: Date.now() + 10,
-        })
+      this.getCharacter(fromId, targetId).then(async (d) => {
+        const character = d?.character || ''
+        return chatWithOther(fromId + targetId, character, message).then(
+          (res) => {
+            return this.db.messages.put({
+              fromId: targetId,
+              targetId: fromId,
+              message: res,
+              time: Date.now() + 10,
+            })
+          }
+        )
       }),
     ])
+  }
+
+  async deleteAllMessages(fromId, targetId) {
+    return Promise.all([
+      this.db.messages.where({ fromId, targetId }).delete(),
+      this.db.messages.where({ fromId: targetId, targetId: fromId }).delete(),
+    ])
+  }
+
+  async getCharacter(fromId, targetId) {
+    return this.db.relations.where({ fromId, targetId }).first()
+  }
+
+  async setCharacter(id, character) {
+    return this.db.relations.update(id, { character })
   }
 }
 

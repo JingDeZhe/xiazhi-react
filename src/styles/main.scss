@@ -45,5 +45,19 @@ body,
 .full-spin {
   > .ant-spin-container {
     --at-apply: h-full overflow-hidden;
+    > div {
+      --at-apply: box-border h-full;
+    }
+  }
+}
+
+.react-draggable {
+  > .close-btn {
+    --at-apply: absolute cursor-pointer transition text-gray;
+    top: 0.5rem;
+    right: 0.5rem;
+    &:hover {
+      --at-apply: text-red;
+    }
   }
 }

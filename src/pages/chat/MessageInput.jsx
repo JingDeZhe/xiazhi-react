@@ -1,8 +1,8 @@
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
-import { Button, Input, Popover } from 'antd'
+import { Button, Input, Popover, message as msg } from 'antd'
 
-export const MessageInput = ({ onSend }) => {
+export const MessageInput = ({ onSend, tools }) => {
   const [message, setMessage] = useState('')
 
   const inputRef = useRef(null)
@@ -21,8 +21,12 @@ export const MessageInput = ({ onSend }) => {
   }
   const handlePressEnter = (e) => {
     if (!e.shiftKey) {
-      onSend(message)
-      setMessage('')
+      if (!message.trim()) {
+        msg.warning('Cannot send empty message')
+      } else {
+        onSend(message)
+        setMessage('')
+      }
       e.preventDefault()
     }
   }
@@ -42,6 +46,7 @@ export const MessageInput = ({ onSend }) => {
         >
           <i className="i-fluent-emoji-flat-grinning-face-with-smiling-eyes"></i>
         </Popover>
+        {tools && tools()}
       </div>
       <div className="message-input-input ctn-body" onBlur={handleInputBlur}>
         <Input.TextArea

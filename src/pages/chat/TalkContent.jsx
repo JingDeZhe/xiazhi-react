@@ -4,17 +4,23 @@ import { useChatStore } from './store/main'
 import Split from 'react-split'
 import { MessageInput } from './MessageInput'
 import { Spin } from 'antd'
+import { MessageManage } from './MessageManage'
 
 export const TalkContent = ({ contactId }) => {
   const user = useChatStore((s) => s.user)
   const [contact, setContact] = useState(null)
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(false)
+  const [messageManageVisible, setMessageManageVisible] = useState(false)
   const scrollbar = useRef(null)
+
+  const refreshMessages = () => {
+    return server.getMessages(user.id, contactId).then(setMessages)
+  }
   useEffect(() => {
     if (!user?.id) return
     server.getUser(contactId).then(setContact)
-    server.getMessages(user.id, contactId).then(setMessages)
+    refreshMessages()
   }, [user, contactId])
 
   useEffect(() => {
@@ -34,6 +40,15 @@ export const TalkContent = ({ contactId }) => {
           setLoading(false)
         })
     })
+  }
+
+  const handleMessageManage = () => {
+    setMessageManageVisible(true)
+  }
+
+  const handleCloseMessageManage = () => {
+    setMessageManageVisible(false)
+    refreshMessages()
   }
 
   return (
@@ -81,7 +96,17 @@ export const TalkContent = ({ contactId }) => {
                 })}
               </Scrollbar>
               <div className="footer">
-                <MessageInput onSend={handleSendMessage}></MessageInput>
+                <MessageInput
+                  onSend={handleSendMessage}
+                  tools={() => (
+                    <>
+                      <i
+                        className="i-tabler-message-2"
+                        onClick={handleMessageManage}
+                      ></i>
+                    </>
+                  )}
+                ></MessageInput>
               </div>
             </Split>
           </Spin>
@@ -90,6 +115,14 @@ export const TalkContent = ({ contactId }) => {
         <div className="full-ctn all-center text-zinc-300 text-[8rem]">
           <i className="i-tabler-message-circle-bolt"></i>
         </div>
+      )}
+
+      {messageManageVisible && (
+        <MessageManage
+          fromId={user.id}
+          targetId={contactId}
+          onClose={handleCloseMessageManage}
+        ></MessageManage>
       )}
     </div>
   )

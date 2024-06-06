@@ -1,6 +1,7 @@
+import 'react-contexify/dist/ReactContexify.css'
+import './main.scss'
 import { Outlet, useParams } from 'react-router-dom'
 import { ChatToolbar } from './ChatToolbar'
-import './main.scss'
 import { server } from './db/server'
 import { useChatStore } from './store/main'
 
@@ -12,7 +13,7 @@ export const Chat = () => {
   }, [userId])
 
   return (
-    <div className="chat-ctn">
+    <div className="chat-ctn" onContextMenu={(e) => e.preventDefault()}>
       <div className="chat">
         <ChatToolbar></ChatToolbar>
         <Outlet></Outlet>
