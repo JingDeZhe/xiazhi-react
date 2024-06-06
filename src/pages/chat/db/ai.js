@@ -3,8 +3,9 @@ import ky from 'ky'
 
 const API_KEY = 'KIMI_API_KEY'
 
+let isAsked = false
 export const chatWithOther = async (key, character, message) => {
-  if (!localGet(API_KEY)) {
+  if (!isAsked && !localGet(API_KEY)) {
     const key = window.prompt(
       '请输入Kimi API Key以进行聊天，不然无法正常对话',
       ''
@@ -15,6 +16,7 @@ export const chatWithOther = async (key, character, message) => {
       localSet(API_KEY, key)
     }
   }
+  isAsked = true
   if (localGet(API_KEY)) {
     return chatWithKimi(key, character, message)
   } else {
