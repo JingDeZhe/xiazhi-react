@@ -76,7 +76,7 @@
     --at-apply: flex gap-3 mb-3 items-start;
     p,
     ol {
-      --at-apply: my-0;
+      --at-apply: my-1;
     }
     img {
       --at-apply: max-w-[200px];
@@ -88,8 +88,7 @@
       --at-apply: w-[50px] h-[50px] object-cover rounded;
     }
     &-content {
-      --at-apply: p-2 rounded text-dark relative shadow-sm whitespace-pre-wrap
-        max-w-[60%];
+      --at-apply: p-2 rounded text-dark relative shadow-sm max-w-[60%];
       &.from {
         --at-apply: bg-[#89D961];
         &::after {

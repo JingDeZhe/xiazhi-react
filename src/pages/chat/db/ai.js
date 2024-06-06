@@ -16,25 +16,32 @@ export const chatWithOther = async (key, character, message) => {
     }
   }
   if (localGet(API_KEY)) {
-    return chatWithKimi(character, message)
+    return chatWithKimi(key, character, message)
   } else {
     return '缺少Kimi API Key……'
   }
 }
 
-const failList = []
-export const chatWithKimi = async (character, message) => {
+const historyMap = new Map()
+export const chatWithKimi = async (key, character, message) => {
+  let t = historyMap.get(key)
+  if (!t) historyMap.set(key, (t = []))
+  t.push({ role: 'user', content: message })
+  if (t.length > 3) {
+    t.splice(0, t.length - 3)
+  }
+  const messages = [...t]
+  if (character) {
+    messages.unshift({
+      role: 'system',
+      content: character,
+    })
+  }
   return ky
     .post('https://api.moonshot.cn/v1/chat/completions', {
       json: {
         model: 'moonshot-v1-8k',
-        messages: [
-          {
-            role: 'system',
-            content: character,
-          },
-          { role: 'user', content: message },
-        ],
+        messages,
         temperature: 0.3,
       },
       headers: {
@@ -43,11 +50,13 @@ export const chatWithKimi = async (character, message) => {
     })
     .json()
     .then((d) => {
-      return d.choices?.[0]?.message?.content || '出错了……'
+      const content = d.choices[0].message.content
+      t.push({ role: 'assistant', content })
+      return content
     })
     .catch((err) => {
       if (err.type === 'rate_limit_reached_error') {
-        return '你说话太快了，请说慢点，比如说间隔2秒以上'
+        return '你说话太快了，请说慢点，比如说每句话间隔至少2秒以上。'
       }
       return err.message
     })
