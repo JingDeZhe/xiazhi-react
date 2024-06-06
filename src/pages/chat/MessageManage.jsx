@@ -2,6 +2,7 @@ import { localGet, localSet } from '@/utils/main'
 import { server } from './db/server'
 import { Button, Input, Popconfirm, Spin, message } from 'antd'
 import Draggable from 'react-draggable'
+import { MessageDisplay } from './MessageDisplay'
 
 export const MessageManage = ({ fromId, targetId, onClose }) => {
   const [target, setTarget] = useState(null)
@@ -52,6 +53,7 @@ export const MessageManage = ({ fromId, targetId, onClose }) => {
     <Draggable
       nodeRef={nodeRef}
       onStop={handleStop}
+      grid={[2, 2]}
       defaultPosition={defaultPosition}
       handle=".handle"
     >
@@ -74,18 +76,12 @@ export const MessageManage = ({ fromId, targetId, onClose }) => {
               ref={scrollbar}
             >
               <div className="py-2 px-4">
-                {messages.map((d) => {
-                  return (
-                    <div className={cls('message', d.type)} key={d.id}>
-                      <div className={cls('message-content', d.type)}>
-                        {d.message}
-                      </div>
-                    </div>
-                  )
-                })}
+                {messages.map((d) => (
+                  <MessageDisplay message={d} key={d.id}></MessageDisplay>
+                ))}
               </div>
             </Scrollbar>
-            <div className="mt-2 text-right space-x-2">
+            <div className="mt-2 pt-2 text-right space-x-2 border-t-(1 zinc-200 solid)">
               <Popconfirm
                 icon={null}
                 description="Sure to delete all messages?"

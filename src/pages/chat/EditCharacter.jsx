@@ -34,6 +34,7 @@ export const EditCharacter = ({ fromId, targetId, onClose }) => {
       nodeRef={nodeRef}
       onStop={handleStop}
       defaultPosition={defaultPosition}
+      grid={[2, 2]}
       handle=".handle"
     >
       <div className="edit-character" ref={nodeRef}>

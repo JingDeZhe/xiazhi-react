@@ -5,6 +5,7 @@ import Split from 'react-split'
 import { MessageInput } from './MessageInput'
 import { Spin } from 'antd'
 import { MessageManage } from './MessageManage'
+import { MessageDisplay } from './MessageDisplay'
 
 export const TalkContent = ({ targetId }) => {
   const user = useChatStore((s) => s.user)
@@ -81,19 +82,9 @@ export const TalkContent = ({ targetId }) => {
                 className="content"
                 ref={scrollbar}
               >
-                {messages.map((d) => {
-                  return (
-                    <div className={cls('message', d.type)} key={d.id}>
-                      <img
-                        className="message-avatar"
-                        src={d.type === 'self' ? user.avatar : contact.avatar}
-                      />
-                      <div className={cls('message-content', d.type)}>
-                        {d.message}
-                      </div>
-                    </div>
-                  )
-                })}
+                {messages.map((d) => (
+                  <MessageDisplay key={d.id} message={d}></MessageDisplay>
+                ))}
               </Scrollbar>
               <div className="footer">
                 <MessageInput

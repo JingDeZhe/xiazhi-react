@@ -1,6 +1,7 @@
 import { chatWithOther } from './ai'
 import { db } from './main'
 
+const avatarCache = {}
 class FakeServer {
   constructor() {
     this.db = db
@@ -19,6 +20,14 @@ class FakeServer {
     return this.db.users.get(id)
   }
 
+  async getAvatar(id) {
+    if (avatarCache[id]) return avatarCache[id]
+    return this.db.users.get(id).then((d) => {
+      avatarCache[id] = d.avatar
+      return d.avatar
+    })
+  }
+
   async getMessages(fromId, targetId) {
     if (!fromId || !targetId) return []
     return Promise.all([
@@ -26,7 +35,7 @@ class FakeServer {
       this.db.messages.where({ fromId: targetId, targetId: fromId }).toArray(),
     ])
       .then(([a, b]) => {
-        a.forEach((d) => (d.type = 'self'))
+        a.forEach((d) => (d.type = 'from'))
         b.forEach((d) => (d.type = 'target'))
         return [...a, ...b].sort((a, b) => a.time - b.time)
       })

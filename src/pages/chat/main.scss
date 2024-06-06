@@ -48,41 +48,6 @@
     .content {
       --at-apply: p-4;
     }
-    .message {
-      --at-apply: flex gap-3 mb-3 items-start;
-      &.self {
-        --at-apply: flex-row-reverse;
-      }
-      &-avatar {
-        --at-apply: w-[50px] h-[50px] object-cover rounded;
-      }
-      &-content {
-        --at-apply: p-2 rounded text-dark relative shadow-sm whitespace-pre-wrap
-          max-w-[60%];
-        &.self {
-          --at-apply: bg-[#89D961];
-          &::after {
-            content: '';
-            position: absolute;
-            top: 0.3rem;
-            right: -0.75rem;
-            border: 0.4rem solid transparent;
-            border-left-color: #89d961;
-          }
-        }
-        &.target {
-          --at-apply: bg-[#fff];
-          &::after {
-            content: '';
-            position: absolute;
-            top: 0.3rem;
-            left: -0.75rem;
-            border: 0.4rem solid transparent;
-            border-right-color: #fff;
-          }
-        }
-      }
-    }
     .footer {
       --at-apply: border-t border-t-solid border-neutral-200;
     }
@@ -96,6 +61,42 @@
         --at-apply: transition cursor-pointer;
         &:hover {
           --at-apply: text-orange;
+        }
+      }
+    }
+  }
+
+  .message-display {
+    --at-apply: flex gap-3 mb-3 items-start;
+    &.from {
+      --at-apply: flex-row-reverse;
+    }
+    &-avatar {
+      --at-apply: w-[50px] h-[50px] object-cover rounded;
+    }
+    &-content {
+      --at-apply: p-2 rounded text-dark relative shadow-sm whitespace-pre-wrap
+        max-w-[60%];
+      &.from {
+        --at-apply: bg-[#89D961];
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0.3rem;
+          right: -0.75rem;
+          border: 0.4rem solid transparent;
+          border-left-color: #89d961;
+        }
+      }
+      &.target {
+        --at-apply: bg-[#fff];
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0.3rem;
+          left: -0.75rem;
+          border: 0.4rem solid transparent;
+          border-right-color: #fff;
         }
       }
     }
@@ -129,8 +130,7 @@
   }
 
   .react-draggable {
-    --at-apply: bg-white shadow rounded border-t-2 border-t-orange
-      border-t-solid;
+    --at-apply: bg-white shadow rounded border-t-(2 orange solid);
     z-index: 1000;
     position: fixed;
   }
