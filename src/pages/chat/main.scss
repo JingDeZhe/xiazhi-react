@@ -6,6 +6,12 @@
   --at-apply: h-[700px] w-[900px] bg-neutral-100 shadow grid overflow-hidden;
   grid-template-columns: max-content 1fr;
 
+  .react-draggable {
+    --at-apply: bg-white shadow rounded border-t-(2 orange solid);
+    z-index: 1000;
+    position: fixed;
+  }
+
   &-toolbar {
     --at-apply: flex flex-col gap-1 p-2 bg-dark-500 text-white;
     .module-item {
@@ -110,7 +116,7 @@
   }
 
   .message-manage {
-    --at-apply: w-[500px] h-[600px];
+    --at-apply: bg-neutral-100 w-[600px] h-[600px];
   }
 
   .avatar-info {
@@ -134,11 +140,5 @@
     textarea {
       --at-apply: resize-none;
     }
-  }
-
-  .react-draggable {
-    --at-apply: bg-white shadow rounded border-t-(2 orange solid);
-    z-index: 1000;
-    position: fixed;
   }
 }
