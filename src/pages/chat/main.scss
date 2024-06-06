@@ -68,6 +68,13 @@
 
   .message-display {
     --at-apply: flex gap-3 mb-3 items-start;
+    p,
+    ol {
+      --at-apply: my-0;
+    }
+    img {
+      --at-apply: max-w-[200px];
+    }
     &.from {
       --at-apply: flex-row-reverse;
     }

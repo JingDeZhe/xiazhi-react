@@ -1,4 +1,5 @@
 import { server } from './db/server'
+import Markdown from 'react-markdown'
 
 export const MessageDisplay = ({ message }) => {
   const { message: content, type } = message
@@ -10,7 +11,9 @@ export const MessageDisplay = ({ message }) => {
   return (
     <div className={cls('message-display', type)}>
       <img className="message-display-avatar" src={avatar} />
-      <div className={cls('message-display-content', type)}>{content}</div>
+      <Markdown className={cls('message-display-content', type)}>
+        {content}
+      </Markdown>
     </div>
   )
 }
