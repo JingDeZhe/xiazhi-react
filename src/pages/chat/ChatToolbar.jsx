@@ -22,11 +22,16 @@ export const ChatToolbar = () => {
   ]
 
   const location = useLocation()
-  const activeCategory = categories.find(
-    (d) => location.pathname.indexOf(d.route) !== -1
-  )
 
-  const [activeModule, setActiveModule] = useState(activeCategory?.route || '')
+  const [activeModule, setActiveModule] = useState('')
+
+  useEffect(() => {
+    const activeCategory = categories.find(
+      (d) => location.pathname.indexOf(d.route) !== -1
+    )
+    setActiveModule(activeCategory?.route || '')
+  }, [location])
+
   const handleSelectModule = (mod) => {
     setActiveModule(mod.route)
     navigate(`./${mod.route}`)

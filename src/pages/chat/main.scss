@@ -116,7 +116,7 @@
   }
 
   .avatar-info {
-    --at-apply: flex items-center gap-2 p-2 cursor-default;
+    --at-apply: flex items-center gap-3 p-2 cursor-default;
     &:hover {
       --at-apply: bg-neutral-300;
     }

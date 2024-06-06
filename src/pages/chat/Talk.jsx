@@ -1,4 +1,4 @@
-import { useLoaderData } from 'react-router-dom'
+import { useLoaderData, useLocation } from 'react-router-dom'
 import { TalkMenu } from './TalkMenu'
 import { TalkContent } from './TalkContent'
 import { server } from './db/server'
@@ -12,11 +12,15 @@ export const talkLoader = async ({ params }) => {
 const LAST_TARGET_ID = 'LAST_TALK_TARGET_ID'
 export const Talk = () => {
   const contacts = useLoaderData()
+  const { state } = useLocation()
 
   const getLastTargetId = () => {
-    const id = sessionGet(LAST_TARGET_ID)
+    const id = state?.targetId || sessionGet(LAST_TARGET_ID)
     if (id) {
-      if (contacts.find((d) => d.id === id)) return id
+      if (contacts.find((d) => d.id === id)) {
+        sessionSet(LAST_TARGET_ID, id)
+        return id
+      }
       sessionDel(LAST_TARGET_ID)
     }
     return ''

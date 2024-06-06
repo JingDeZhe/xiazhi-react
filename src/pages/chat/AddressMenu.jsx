@@ -2,13 +2,12 @@ import { Button, Input } from 'antd'
 import PinyinEngine from 'pinyin-engine'
 import { Menu, Item, useContextMenu } from 'react-contexify'
 import { EditCharacter } from './EditCharacter'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 export const AddressMenu = ({ contacts, targetId, onSelect }) => {
   const { userId } = useParams()
   const [queryText, setQueryText] = useState('')
-  const [editCharacterVisible, setEditCharacterVisible] = useState(false)
-  const [menuTargetId, setMenuTargetId] = useState(null)
+  const navigate = useNavigate()
 
   const engine = useMemo(() => {
     return new PinyinEngine(contacts, ['nickname'])
@@ -18,7 +17,7 @@ export const AddressMenu = ({ contacts, targetId, onSelect }) => {
   }
   const filteredContacts = engine.query(queryText)
 
-  const CONTACT_MENU = 'CONTACT_MENU'
+  const CONTACT_MENU = 'ADDRESS_CONTACT_MENU'
   const { show: showContactMenu } = useContextMenu({
     id: CONTACT_MENU,
   })
@@ -28,9 +27,9 @@ export const AddressMenu = ({ contacts, targetId, onSelect }) => {
     showContactMenu({ event: e })
   }
   const handleContactMenuClick = ({ id }) => {
-    if (id === 'editCharacter') {
-      setMenuTargetId(_menuTargetId)
-      setEditCharacterVisible(true)
+    if (id === 'chat') {
+      onSelect(_menuTargetId)
+      navigate('../talk', { state: { targetId: _menuTargetId } })
     }
   }
 
@@ -39,7 +38,7 @@ export const AddressMenu = ({ contacts, targetId, onSelect }) => {
       <div className="address-menu-search v-center">
         <Input value={queryText} onInput={handleQuery}></Input>
         <Button>
-          <i className="i-tabler-plus"></i>
+          <i className="i-tabler-user-plus"></i>
         </Button>
       </div>
       <Scrollbar
@@ -50,43 +49,29 @@ export const AddressMenu = ({ contacts, targetId, onSelect }) => {
         {filteredContacts.map((d) => {
           return (
             <div
-              className={cls('avatar-info', { active: targetId === d.id })}
+              className={cls('avatar-info', {
+                active: targetId === d.id,
+              })}
               key={d.id}
               onClick={() => onSelect(d.id)}
               onContextMenu={handleContactMenu}
               data-id={d.id}
             >
               <img className="avatar" src={d.avatar} />
-              <div className="info">
-                <div className="flex gap-2">
-                  <span className="flex-1">{d.nickname}</span>
-                  <span className="text-fade-2 truncate mr-1">
-                    {d.lastMessageTime}
-                  </span>
-                </div>
-                <div className="text-fade-1">{d.lastMessage}</div>
-              </div>
+              <span className="flex-1">{d.nickname}</span>
             </div>
           )
         })}
       </Scrollbar>
 
       <Menu id={CONTACT_MENU}>
-        <Item id="editCharacter" onClick={handleContactMenuClick}>
-          Edit Character
+        <Item id="chat" onClick={handleContactMenuClick}>
+          Chat
         </Item>
-        <Item id="remove" onClick={handleContactMenuClick}>
-          Remove
+        <Item id="delete" onClick={handleContactMenuClick}>
+          Delete
         </Item>
       </Menu>
-
-      {editCharacterVisible && (
-        <EditCharacter
-          fromId={userId}
-          targetId={menuTargetId}
-          onClose={() => setEditCharacterVisible(false)}
-        ></EditCharacter>
-      )}
     </div>
   )
 }

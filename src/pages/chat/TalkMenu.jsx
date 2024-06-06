@@ -18,7 +18,7 @@ export const TalkMenu = ({ contacts, targetId, onSelect }) => {
   }
   const filteredContacts = engine.query(queryText)
 
-  const CONTACT_MENU = 'CONTACT_MENU'
+  const CONTACT_MENU = 'TALK_CONTACT_MENU'
   const { show: showContactMenu } = useContextMenu({
     id: CONTACT_MENU,
   })
@@ -75,8 +75,8 @@ export const TalkMenu = ({ contacts, targetId, onSelect }) => {
         <Item id="editCharacter" onClick={handleContactMenuClick}>
           Edit Character
         </Item>
-        <Item id="remove" onClick={handleContactMenuClick}>
-          Remove
+        <Item id="hide" onClick={handleContactMenuClick}>
+          Hide
         </Item>
       </Menu>
 
