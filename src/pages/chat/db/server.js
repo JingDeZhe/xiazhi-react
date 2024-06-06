@@ -7,13 +7,20 @@ class FakeServer {
     this.db = db
   }
 
-  async getContacts(id) {
+  async getActiveContacts(id) {
     return this.db.transaction('r', [db.users, db.relations], async () => {
       const relations = await db.relations.where({ fromId: id }).toArray()
       const targetIds = relations.map((d) => d.targetId)
       const contacts = await db.users.where('id').anyOf(targetIds).toArray()
       return contacts
     })
+  }
+
+  async getContacts(id) {
+    const relations = await db.relations.where({ fromId: id }).toArray()
+    const targetIds = relations.map((d) => d.targetId)
+    const contacts = await db.users.where('id').anyOf(targetIds).toArray()
+    return contacts
   }
 
   async getUser(id) {

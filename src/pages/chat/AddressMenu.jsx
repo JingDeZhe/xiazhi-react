@@ -4,7 +4,7 @@ import { Menu, Item, useContextMenu } from 'react-contexify'
 import { EditCharacter } from './EditCharacter'
 import { useParams } from 'react-router-dom'
 
-export const TalkMenu = ({ contacts, targetId, onSelect }) => {
+export const AddressMenu = ({ contacts, targetId, onSelect }) => {
   const { userId } = useParams()
   const [queryText, setQueryText] = useState('')
   const [editCharacterVisible, setEditCharacterVisible] = useState(false)
@@ -35,8 +35,8 @@ export const TalkMenu = ({ contacts, targetId, onSelect }) => {
   }
 
   return (
-    <div className="talk-menu col-ctn border-r">
-      <div className="talk-menu-search v-center">
+    <div className="address-menu col-ctn border-r">
+      <div className="address-menu-search v-center">
         <Input value={queryText} onInput={handleQuery}></Input>
         <Button>
           <i className="i-tabler-plus"></i>

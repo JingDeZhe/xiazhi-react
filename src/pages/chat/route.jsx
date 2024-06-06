@@ -1,5 +1,5 @@
 import { redirect } from 'react-router-dom'
-import { AddressBook } from './AddressBook'
+import { AddressBook, addressBookLoader } from './AddressBook'
 import { Moment } from './Moment'
 import { Talk, talkLoader } from './Talk'
 import { Chat } from './main'
@@ -31,6 +31,7 @@ export const chatRoute = {
         {
           path: 'address-book',
           element: <AddressBook />,
+          loader: addressBookLoader,
         },
         {
           path: 'moment',

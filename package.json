@@ -13,6 +13,7 @@
     "@emoji-mart/data": "^1.2.1",
     "@emoji-mart/react": "^1.1.1",
     "@lotusloli/random-names": "^0.0.1",
+    "@tanstack/react-virtual": "^3.5.1",
     "ahooks": "^3.8.0",
     "antd": "^5.17.4",
     "classnames": "^2.5.1",

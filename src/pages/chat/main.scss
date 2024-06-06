@@ -26,12 +26,9 @@
     }
   }
 
-  .chat-talk {
-    --at-apply: grid grid-cols-[240px_1fr] overflow-hidden;
-  }
-
   --header-height: 3.5rem;
-  .talk-menu {
+  .talk-menu,
+  .address-menu {
     --at-apply: bg-neutral-200 border-r-(1 solid) border-neutral-300;
     &-search {
       --at-apply: px-2 bg-neutral-100;
@@ -48,14 +45,14 @@
 
   .talk-content {
     .header {
-      --at-apply: px-4 border-b border-b-solid border-neutral-200;
+      --at-apply: px-4 border-b-(1 solid neutral-200);
       height: var(--header-height);
     }
     .content {
       --at-apply: p-4;
     }
     .footer {
-      --at-apply: border-t border-t-solid border-neutral-200;
+      --at-apply: border-t-(1 solid neutral-200);
     }
   }
 
@@ -139,5 +136,13 @@
     textarea {
       --at-apply: resize-none;
     }
+  }
+
+  .border-r {
+    --at-apply: border-r-(1 solid neutral-200);
+  }
+
+  .border-t {
+    --at-apply: border-t-(1 solid neutral-200);
   }
 }
