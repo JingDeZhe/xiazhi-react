@@ -15,7 +15,7 @@ export const db = new Dexie('chatDB')
 
 db.version(1).stores({
   users: '&id,username,nickname',
-  relations: '++id,[fromId+targetId],fromId,targetId,alias',
+  relations: '++id,[fromId+targetId],fromId,targetId,alias,status',
   messages: '++id,[fromId+targetId],fromId,targetId,time',
 })
 window.db = db
@@ -30,16 +30,12 @@ kyGet(FAKE_STORE_PREPARED).then((v) => {
 
 async function prepareFakeStore() {
   const users = new Array(20).fill().map(() => {
-    const t = randomTime(10)
     const name = randomName(random() < 0.5 ? 1 : 2)
     return {
       id: uid(),
       username: pinyin(name),
       nickname: name,
       avatar: randomAvatar(randomInt(100 - 1)),
-      lastMessage: '早上好呀',
-      lastMessageTime: fmtHumanTime(t),
-      lastMessageTime0: t,
     }
   })
 
@@ -52,6 +48,7 @@ async function prepareFakeStore() {
         fromId: user.id,
         targetId: user2.id,
         alias: user2.nickname,
+        status: '0',
       })
       messages.push({
         fromId: user.id,

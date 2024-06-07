@@ -36,6 +36,12 @@ export const AddressBook = () => {
     })
   }
 
+  const handleChat = (contactId) => {
+    server.activeContact(contactId).then(() => {
+      navigate('../talk', { state: { contactId } })
+    })
+  }
+
   const refreshPage = () => {
     navigate('.', { replace: true })
   }
@@ -47,11 +53,13 @@ export const AddressBook = () => {
         onSelect={handleSelectItem}
         onDelete={handleDeleteContact}
         onRefresh={refreshPage}
+        onChat={handleChat}
       ></AddressMenu>
       <AddressContent
         contactId={contactId}
         onDelete={handleDeleteContact}
         onRefresh={refreshPage}
+        onChat={handleChat}
       ></AddressContent>
     </MainLayout>
   )

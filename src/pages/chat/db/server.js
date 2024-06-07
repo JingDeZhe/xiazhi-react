@@ -8,7 +8,9 @@ class FakeServer {
   }
 
   async getActiveContacts(fromId) {
-    const relations = await db.relations.where({ fromId }).toArray()
+    const relations = await db.relations
+      .where({ fromId })
+      .toArray((arr) => arr.filter((d) => d.status === '1'))
     return Promise.all(relations.map((d) => this.getContact(d.id))).then(
       (arr) => arr.filter((d) => d)
     )
@@ -32,11 +34,11 @@ class FakeServer {
   }
 
   async deactiveContact(id) {
-    return this.db.relations.update(id, { active: false })
+    return this.db.relations.update(id, { status: '0' })
   }
 
   async activeContact(id) {
-    return this.db.relations.update(id, { active: true })
+    return this.db.relations.update(id, { status: '1' })
   }
 
   async addRelation(fromId, targetId) {

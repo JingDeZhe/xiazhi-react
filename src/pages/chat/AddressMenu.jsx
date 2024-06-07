@@ -1,7 +1,7 @@
 import { Button, Input, Modal } from 'antd'
 import PinyinEngine from 'pinyin-engine'
 import { Menu, Item, useContextMenu } from 'react-contexify'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { RelationManage } from './RelationManage'
 
 export const AddressMenu = ({
@@ -10,11 +10,11 @@ export const AddressMenu = ({
   onSelect,
   onDelete,
   onRefresh,
+  onChat,
 }) => {
   const { userId } = useParams()
   const [queryText, setQueryText] = useState('')
   const [relationManageVisible, setRelationManageVisible] = useState(false)
-  const navigate = useNavigate()
 
   const engine = useMemo(() => {
     return new PinyinEngine(contacts, ['nickname'])
@@ -36,7 +36,7 @@ export const AddressMenu = ({
   const handleContactMenuClick = ({ id }) => {
     if (id === 'chat') {
       onSelect(_menuId)
-      navigate('../talk', { state: { contactId: _menuId } })
+      onChat(_menuId)
     } else if (id === 'delete') {
       onDelete(_menuId)
     }
@@ -85,7 +85,7 @@ export const AddressMenu = ({
         title="Add contact"
         open={relationManageVisible}
         onCancel={() => setRelationManageVisible(false)}
-        onClose={onRefresh}
+        afterClose={onRefresh}
         footer={null}
       >
         <RelationManage fromId={userId}></RelationManage>

@@ -36,7 +36,7 @@ export const chatWithKimi = async (key, character, message) => {
   if (character) {
     messages.unshift({
       role: 'system',
-      content: character,
+      content: '你是' + character,
     })
   }
   return ky

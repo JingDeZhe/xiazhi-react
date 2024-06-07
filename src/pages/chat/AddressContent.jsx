@@ -1,11 +1,9 @@
 import { Button, Descriptions, Input, Popconfirm, Space } from 'antd'
 import { EmptyInfo } from './EmptyInfo'
 import { server } from './db/server'
-import { useNavigate } from 'react-router-dom'
 import { EditRelation } from './EditRelation'
 
-export const AddressContent = ({ contactId, onDelete, onRefresh }) => {
-  const navigate = useNavigate()
+export const AddressContent = ({ contactId, onDelete, onRefresh, onChat }) => {
   const [contact, setContact] = useState()
   const [editRelationVisible, setEditRelationVisible] = useState(false)
 
@@ -18,9 +16,6 @@ export const AddressContent = ({ contactId, onDelete, onRefresh }) => {
   }
   const handleEditContact = () => {
     setEditRelationVisible(true)
-  }
-  const handleChat = () => {
-    navigate('../talk', { state: { contactId: contactId } })
   }
   const handleEditRelationClosed = () => {
     setEditRelationVisible(false)
@@ -58,7 +53,7 @@ export const AddressContent = ({ contactId, onDelete, onRefresh }) => {
               <Button danger>Delete</Button>
             </Popconfirm>
             <Button onClick={handleEditContact}>Edit</Button>
-            <Button onClick={handleChat}>Chat</Button>
+            <Button onClick={() => onChat(contactId)}>Chat</Button>
           </Space>
 
           {editRelationVisible && (
