@@ -1,8 +1,11 @@
 import { Input } from 'antd'
 import PinyinEngine from 'pinyin-engine'
 import { Menu, Item, useContextMenu } from 'react-contexify'
+import { server } from './db/server'
+import { useNavigate } from 'react-router-dom'
 
-export const TalkMenu = ({ contacts, contactId, onSelect }) => {
+export const TalkMenu = ({ contacts, contactId, onSelect, onRefresh }) => {
+  const navigate = useNavigate()
   const [queryText, setQueryText] = useState('')
 
   const engine = useMemo(() => {
@@ -22,7 +25,13 @@ export const TalkMenu = ({ contacts, contactId, onSelect }) => {
     _menuId = parseInt(e.currentTarget.dataset.id)
     showContactMenu({ event: e })
   }
-  const handleContactMenuClick = ({ id }) => {}
+  const handleContactMenuClick = ({ id }) => {
+    if (id === 'hide') {
+      server.deactiveContact(contactId).then(onRefresh)
+    } else if (id === 'info') {
+      navigate('../address-book', { state: { contactId } })
+    }
+  }
 
   return (
     <div className="talk-menu col-ctn border-r">
@@ -67,6 +76,9 @@ export const TalkMenu = ({ contacts, contactId, onSelect }) => {
       <Menu id={CONTACT_MENU}>
         <Item id="hide" onClick={handleContactMenuClick}>
           Hide
+        </Item>
+        <Item id="info" onClick={handleContactMenuClick}>
+          Info
         </Item>
       </Menu>
     </div>

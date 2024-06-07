@@ -1,4 +1,4 @@
-import { useLoaderData, useLocation } from 'react-router-dom'
+import { useLoaderData, useLocation, useNavigate } from 'react-router-dom'
 import { TalkMenu } from './TalkMenu'
 import { TalkContent } from './TalkContent'
 import { server } from './db/server'
@@ -11,6 +11,7 @@ export const talkLoader = async ({ params }) => {
 
 const LAST_CONTACT_ID = 'LAST_TALK_CONTACT_ID'
 export const Talk = () => {
+  const navigate = useNavigate()
   const contacts = useLoaderData()
   const { state } = useLocation()
 
@@ -31,12 +32,17 @@ export const Talk = () => {
     sessionSet(LAST_CONTACT_ID, id)
     setContactId(id)
   }
+
+  const refreshPage = () => {
+    navigate('.', { replace: true })
+  }
   return (
     <MainLayout className="chat-talk">
       <TalkMenu
         contacts={contacts}
         contactId={contactId}
         onSelect={handleSelectContact}
+        onRefresh={refreshPage}
       ></TalkMenu>
       <TalkContent contactId={contactId}></TalkContent>
     </MainLayout>

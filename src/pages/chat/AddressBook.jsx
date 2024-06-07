@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigate } from 'react-router-dom'
+import { useLoaderData, useLocation, useNavigate } from 'react-router-dom'
 import { server } from './db/server'
 import { AddressMenu } from './AddressMenu'
 import { sessionDel, sessionGet, sessionSet } from '@/utils/main'
@@ -11,13 +11,17 @@ export const addressBookLoader = async ({ params }) => {
 
 export const AddressBook = () => {
   const navigate = useNavigate()
+  const { state } = useLocation()
   const contacts = useLoaderData()
 
   const LAST_CONTACT_ID = 'LAST_ADDRESS_CONTACT_ID'
   const getLastContactId = () => {
-    const id = sessionGet(LAST_CONTACT_ID)
+    const id = state?.contactId || sessionGet(LAST_CONTACT_ID)
     if (id) {
-      if (contacts.find((d) => d.id === id)) return id
+      if (contacts.find((d) => d.id === id)) {
+        sessionSet(LAST_CONTACT_ID, id)
+        return id
+      }
       sessionDel(LAST_CONTACT_ID)
     }
     return ''
