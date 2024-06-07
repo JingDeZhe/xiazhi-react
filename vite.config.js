@@ -25,23 +25,7 @@ export default defineConfig({
       dts: './auto-imports.d.ts',
     }),
     cdn({
-      modules: [
-        {
-          name: 'react',
-          var: 'React',
-          path: `https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/cjs/react.production.min.js`,
-        },
-        {
-          name: 'react-dom',
-          var: 'ReactDOM',
-          path: `https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/cjs/react-dom.production.min.js`,
-        },
-        {
-          name: 'react-router-dom',
-          var: 'ReactRouterDOM',
-          path: `https://cdnjs.cloudflare.com/ajax/libs/react-router-dom/6.23.1/react-router-dom.production.min.js`,
-        },
-      ],
+      modules: ['react', 'react-dom', 'react-router-dom'],
     }),
   ],
   resolve: {
