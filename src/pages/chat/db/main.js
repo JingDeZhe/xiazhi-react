@@ -1,5 +1,4 @@
 import {
-  fmtHumanTime,
   kyGet,
   kySet,
   random,
@@ -18,7 +17,6 @@ db.version(1).stores({
   relations: '++id,[fromId+targetId],fromId,targetId,alias,status',
   messages: '++id,[fromId+targetId],fromId,targetId,time',
 })
-window.db = db
 
 const FAKE_STORE_PREPARED = 'FAKE_STORE_PREPARED'
 kyGet(FAKE_STORE_PREPARED).then((v) => {

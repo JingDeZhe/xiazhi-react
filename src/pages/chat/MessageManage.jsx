@@ -37,7 +37,7 @@ export const MessageManage = ({ contactId, onClose }) => {
 
   const handleDeleleAllMessages = () => {
     server.deleteAllMessages(contactId).then(() => {
-      refreshMessages()
+      onClose()
       toast.success('Successful')
     })
   }
