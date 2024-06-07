@@ -5,6 +5,7 @@ import { MessageInput } from './MessageInput'
 import { Spin } from 'antd'
 import { MessageManage } from './MessageManage'
 import { MessageDisplay } from './MessageDisplay'
+import { EmptyInfo } from './EmptyInfo'
 
 export const TalkContent = ({ targetId }) => {
   const user = useChatStore((s) => s.user)
@@ -102,9 +103,9 @@ export const TalkContent = ({ targetId }) => {
           </Spin>
         </>
       ) : (
-        <div className="full-ctn all-center text-zinc-300 text-[8rem]">
+        <EmptyInfo>
           <i className="i-tabler-message-circle-bolt"></i>
-        </div>
+        </EmptyInfo>
       )}
 
       {messageManageVisible && (

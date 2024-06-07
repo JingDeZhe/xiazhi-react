@@ -23,6 +23,20 @@ class FakeServer {
     return contacts
   }
 
+  async getContact(fromId, targetId) {
+    const relation = await this.db.relations.where({ fromId, targetId }).first()
+    const contact = await this.db.users.get(targetId)
+    return {
+      ...contact,
+      ...relation,
+    }
+  }
+
+  async setContact(id, data) {}
+  async deleteContact(id) {
+    return this.db.relations.delete(id)
+  }
+
   async getUser(id) {
     return this.db.users.get(id)
   }

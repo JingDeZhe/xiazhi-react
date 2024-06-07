@@ -1,4 +1,4 @@
-import { useLoaderData } from 'react-router-dom'
+import { useLoaderData, useNavigate, useParams } from 'react-router-dom'
 import { server } from './db/server'
 import { AddressMenu } from './AddressMenu'
 import { sessionDel, sessionGet, sessionSet } from '@/utils/main'
@@ -10,6 +10,7 @@ export const addressBookLoader = async ({ params }) => {
 }
 
 export const AddressBook = () => {
+  const { userId } = useParams()
   const contacts = useLoaderData()
   const LAST_TARGET_ID = 'LAST_ADDRESS_TARGET_ID'
   const getLastTargetId = () => {
@@ -25,14 +26,29 @@ export const AddressBook = () => {
     sessionSet(LAST_TARGET_ID, id)
     setTargetId(id)
   }
+
+  const handleDeleteContact = () => {
+    setTargetId('')
+    refreshPage()
+  }
+
+  const navigate = useNavigate()
+  const refreshPage = () => {
+    navigate('.', { replace: true })
+  }
   return (
     <MainLayout>
       <AddressMenu
         contacts={contacts}
         targetId={targetId}
         onSelect={handleSelectItem}
+        onDelete={handleDeleteContact}
       ></AddressMenu>
-      <AddressContent></AddressContent>
+      <AddressContent
+        fromId={userId}
+        targetId={targetId}
+        onDelete={handleDeleteContact}
+      ></AddressContent>
     </MainLayout>
   )
 }

@@ -4,6 +4,7 @@ import { Outlet, useParams } from 'react-router-dom'
 import { ChatToolbar } from './ChatToolbar'
 import { server } from './db/server'
 import { useChatStore } from './store/main'
+import { ConfigProvider } from 'antd'
 
 export const Chat = () => {
   const { userId } = useParams()
@@ -13,11 +14,22 @@ export const Chat = () => {
   }, [userId])
 
   return (
-    <div className="chat-ctn" onContextMenu={(e) => e.preventDefault()}>
-      <div className="chat">
-        <ChatToolbar></ChatToolbar>
-        <Outlet></Outlet>
+    <ConfigProvider
+      theme={{
+        components: {
+          Descriptions: {
+            titleMarginBottom: '0.5rem',
+            itemPaddingBottom: '0.2rem',
+          },
+        },
+      }}
+    >
+      <div className="chat-ctn" onContextMenu={(e) => e.preventDefault()}>
+        <div className="chat">
+          <ChatToolbar></ChatToolbar>
+          <Outlet></Outlet>
+        </div>
       </div>
-    </div>
+    </ConfigProvider>
   )
 }

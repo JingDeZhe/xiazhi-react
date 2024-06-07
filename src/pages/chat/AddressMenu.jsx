@@ -1,11 +1,9 @@
 import { Button, Input } from 'antd'
 import PinyinEngine from 'pinyin-engine'
 import { Menu, Item, useContextMenu } from 'react-contexify'
-import { EditCharacter } from './EditCharacter'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-export const AddressMenu = ({ contacts, targetId, onSelect }) => {
-  const { userId } = useParams()
+export const AddressMenu = ({ contacts, targetId, onSelect, onDelete }) => {
   const [queryText, setQueryText] = useState('')
   const navigate = useNavigate()
 
@@ -30,6 +28,8 @@ export const AddressMenu = ({ contacts, targetId, onSelect }) => {
     if (id === 'chat') {
       onSelect(_menuTargetId)
       navigate('../talk', { state: { targetId: _menuTargetId } })
+    } else if (id === 'delete') {
+      onDelete(_menuTargetId)
     }
   }
 

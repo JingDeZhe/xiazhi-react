@@ -11,7 +11,7 @@ export const MessageDisplay = ({ message }) => {
   }, [])
   return (
     <div className={cls('message-display', type)}>
-      <img className="message-display-avatar" src={avatar} />
+      <img className="avatar" src={avatar} />
       <Markdown className={cls('message-display-content', type)}>
         {content}
       </Markdown>
