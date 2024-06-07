@@ -12,16 +12,6 @@
     position: fixed;
   }
 
-  .avatar {
-    --at-apply: w-[3rem] h-[3rem] object-cover rounded;
-    &.lg {
-      --at-apply: w-[4.5rem] h-[4.5rem];
-    }
-    &.xl {
-      --at-apply: w-[6rem] h-[6rem];
-    }
-  }
-
   textarea {
     --at-apply: resize-none;
   }
@@ -154,5 +144,28 @@
 
   .border-t {
     --at-apply: border-t-(1 solid neutral-200);
+  }
+}
+
+.chat-contact-manage {
+  --at-apply: h-[500px];
+  .user-info {
+    --at-apply: flex items-center gap-2 mb-1 p-1 cursor-default transition;
+    &:hover {
+      --at-apply: bg-neutral-200;
+    }
+  }
+}
+
+.chat-avatar {
+  --at-apply: w-[3rem] h-[3rem] object-cover rounded;
+  &.sm {
+    --at-apply: w-[2rem] h-[2rem];
+  }
+  &.lg {
+    --at-apply: w-[4.5rem] h-[4.5rem];
+  }
+  &.xl {
+    --at-apply: w-[6rem] h-[6rem];
   }
 }

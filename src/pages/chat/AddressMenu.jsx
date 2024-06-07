@@ -1,10 +1,19 @@
-import { Button, Input } from 'antd'
+import { Button, Input, Modal } from 'antd'
 import PinyinEngine from 'pinyin-engine'
 import { Menu, Item, useContextMenu } from 'react-contexify'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { RelationManage } from './RelationManage'
 
-export const AddressMenu = ({ contacts, targetId, onSelect, onDelete }) => {
+export const AddressMenu = ({
+  contacts,
+  contactId,
+  onSelect,
+  onDelete,
+  onRefresh,
+}) => {
+  const { userId } = useParams()
   const [queryText, setQueryText] = useState('')
+  const [relationManageVisible, setRelationManageVisible] = useState(false)
   const navigate = useNavigate()
 
   const engine = useMemo(() => {
@@ -19,25 +28,24 @@ export const AddressMenu = ({ contacts, targetId, onSelect, onDelete }) => {
   const { show: showContactMenu } = useContextMenu({
     id: CONTACT_MENU,
   })
-  let _menuTargetId = ''
+  let _menuId = ''
   const handleContactMenu = (e) => {
-    _menuTargetId = e.currentTarget.dataset.id
+    _menuId = e.currentTarget.dataset.id
     showContactMenu({ event: e })
   }
   const handleContactMenuClick = ({ id }) => {
     if (id === 'chat') {
-      onSelect(_menuTargetId)
-      navigate('../talk', { state: { targetId: _menuTargetId } })
+      onSelect(_menuId)
+      navigate('../talk', { state: { contactId: _menuId } })
     } else if (id === 'delete') {
-      onDelete(_menuTargetId)
+      onDelete(_menuId)
     }
   }
-
   return (
     <div className="address-menu col-ctn border-r">
       <div className="address-menu-search v-center">
         <Input value={queryText} onInput={handleQuery}></Input>
-        <Button>
+        <Button onClick={() => setRelationManageVisible(true)}>
           <i className="i-tabler-user-plus"></i>
         </Button>
       </div>
@@ -50,15 +58,15 @@ export const AddressMenu = ({ contacts, targetId, onSelect, onDelete }) => {
           return (
             <div
               className={cls('avatar-info', {
-                active: targetId === d.id,
+                active: contactId === d.id,
               })}
               key={d.id}
               onClick={() => onSelect(d.id)}
               onContextMenu={handleContactMenu}
               data-id={d.id}
             >
-              <img className="avatar" src={d.avatar} />
-              <span className="flex-1">{d.nickname}</span>
+              <img className="chat-avatar" src={d.avatar} />
+              <span className="flex-1">{d.alias}</span>
             </div>
           )
         })}
@@ -72,6 +80,16 @@ export const AddressMenu = ({ contacts, targetId, onSelect, onDelete }) => {
           Delete
         </Item>
       </Menu>
+
+      <Modal
+        title="Add contact"
+        open={relationManageVisible}
+        onCancel={() => setRelationManageVisible(false)}
+        onClose={onRefresh}
+        footer={null}
+      >
+        <RelationManage fromId={userId}></RelationManage>
+      </Modal>
     </div>
   )
 }

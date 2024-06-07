@@ -59,11 +59,15 @@ export const randomInt = (a = 1, b = 0) => {
 }
 
 export const sessionSet = (k, v) => {
-  sessionStorage.setItem(k, v)
+  sessionStorage.setItem(k, JSON.stringify(v))
 }
 
 export const sessionGet = (k) => {
-  return sessionStorage.getItem(k)
+  try {
+    return JSON.parse(sessionStorage.getItem(k))
+  } catch (err) {
+    return
+  }
 }
 
 export const sessionDel = (k) => {

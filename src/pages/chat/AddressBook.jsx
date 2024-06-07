@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigate, useParams } from 'react-router-dom'
+import { useLoaderData, useNavigate } from 'react-router-dom'
 import { server } from './db/server'
 import { AddressMenu } from './AddressMenu'
 import { sessionDel, sessionGet, sessionSet } from '@/utils/main'
@@ -10,29 +10,32 @@ export const addressBookLoader = async ({ params }) => {
 }
 
 export const AddressBook = () => {
-  const { userId } = useParams()
+  const navigate = useNavigate()
   const contacts = useLoaderData()
-  const LAST_TARGET_ID = 'LAST_ADDRESS_TARGET_ID'
-  const getLastTargetId = () => {
-    const id = sessionGet(LAST_TARGET_ID)
+
+  const LAST_CONTACT_ID = 'LAST_ADDRESS_CONTACT_ID'
+  const getLastContactId = () => {
+    const id = sessionGet(LAST_CONTACT_ID)
     if (id) {
       if (contacts.find((d) => d.id === id)) return id
-      sessionDel(LAST_TARGET_ID)
+      sessionDel(LAST_CONTACT_ID)
     }
     return ''
   }
-  const [targetId, setTargetId] = useState(getLastTargetId)
+  const [contactId, setContactId] = useState(getLastContactId)
   const handleSelectItem = (id) => {
-    sessionSet(LAST_TARGET_ID, id)
-    setTargetId(id)
+    sessionSet(LAST_CONTACT_ID, id)
+    setContactId(id)
   }
 
-  const handleDeleteContact = () => {
-    setTargetId('')
-    refreshPage()
+  const handleDeleteContact = (id) => {
+    server.deleteRelation(id).then(() => {
+      sessionSet(LAST_CONTACT_ID, '')
+      setContactId('')
+      refreshPage()
+    })
   }
 
-  const navigate = useNavigate()
   const refreshPage = () => {
     navigate('.', { replace: true })
   }
@@ -40,14 +43,15 @@ export const AddressBook = () => {
     <MainLayout>
       <AddressMenu
         contacts={contacts}
-        targetId={targetId}
+        contactId={contactId}
         onSelect={handleSelectItem}
         onDelete={handleDeleteContact}
+        onRefresh={refreshPage}
       ></AddressMenu>
       <AddressContent
-        fromId={userId}
-        targetId={targetId}
+        contactId={contactId}
         onDelete={handleDeleteContact}
+        onRefresh={refreshPage}
       ></AddressContent>
     </MainLayout>
   )

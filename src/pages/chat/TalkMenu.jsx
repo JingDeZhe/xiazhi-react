@@ -1,17 +1,12 @@
-import { Button, Input } from 'antd'
+import { Input } from 'antd'
 import PinyinEngine from 'pinyin-engine'
 import { Menu, Item, useContextMenu } from 'react-contexify'
-import { EditCharacter } from './EditCharacter'
-import { useParams } from 'react-router-dom'
 
-export const TalkMenu = ({ contacts, targetId, onSelect }) => {
-  const { userId } = useParams()
+export const TalkMenu = ({ contacts, contactId, onSelect }) => {
   const [queryText, setQueryText] = useState('')
-  const [editCharacterVisible, setEditCharacterVisible] = useState(false)
-  const [menuTargetId, setMenuTargetId] = useState(null)
 
   const engine = useMemo(() => {
-    return new PinyinEngine(contacts, ['nickname'])
+    return new PinyinEngine(contacts, ['alias'])
   }, [contacts])
   const handleQuery = (e) => {
     setQueryText(e.target.value)
@@ -22,25 +17,21 @@ export const TalkMenu = ({ contacts, targetId, onSelect }) => {
   const { show: showContactMenu } = useContextMenu({
     id: CONTACT_MENU,
   })
-  let _menuTargetId = ''
+  let _menuId = ''
   const handleContactMenu = (e) => {
-    _menuTargetId = e.currentTarget.dataset.id
+    _menuId = parseInt(e.currentTarget.dataset.id)
     showContactMenu({ event: e })
   }
-  const handleContactMenuClick = ({ id }) => {
-    if (id === 'editCharacter') {
-      setMenuTargetId(_menuTargetId)
-      setEditCharacterVisible(true)
-    }
-  }
+  const handleContactMenuClick = ({ id }) => {}
 
   return (
     <div className="talk-menu col-ctn border-r">
       <div className="talk-menu-search v-center">
-        <Input value={queryText} onInput={handleQuery}></Input>
-        <Button>
-          <i className="i-tabler-plus"></i>
-        </Button>
+        <Input
+          value={queryText}
+          onInput={handleQuery}
+          placeholder="search"
+        ></Input>
       </div>
       <Scrollbar
         className="ctn-body"
@@ -50,13 +41,15 @@ export const TalkMenu = ({ contacts, targetId, onSelect }) => {
         {filteredContacts.map((d) => {
           return (
             <div
-              className={cls('avatar-info', { active: targetId === d.id })}
+              className={cls('avatar-info', {
+                active: contactId === d.id,
+              })}
               key={d.id}
               onClick={() => onSelect(d.id)}
               onContextMenu={handleContactMenu}
               data-id={d.id}
             >
-              <img className="avatar" src={d.avatar} />
+              <img className="chat-avatar" src={d.avatar} />
               <div className="info">
                 <div className="flex gap-2">
                   <span className="flex-1">{d.nickname}</span>
@@ -72,21 +65,10 @@ export const TalkMenu = ({ contacts, targetId, onSelect }) => {
       </Scrollbar>
 
       <Menu id={CONTACT_MENU}>
-        <Item id="editCharacter" onClick={handleContactMenuClick}>
-          Edit Character
-        </Item>
         <Item id="hide" onClick={handleContactMenuClick}>
           Hide
         </Item>
       </Menu>
-
-      {editCharacterVisible && (
-        <EditCharacter
-          fromId={userId}
-          targetId={menuTargetId}
-          onClose={() => setEditCharacterVisible(false)}
-        ></EditCharacter>
-      )}
     </div>
   )
 }

@@ -7,38 +7,78 @@ class FakeServer {
     this.db = db
   }
 
-  async getActiveContacts(id) {
-    return this.db.transaction('r', [db.users, db.relations], async () => {
-      const relations = await db.relations.where({ fromId: id }).toArray()
-      const targetIds = relations.map((d) => d.targetId)
-      const contacts = await db.users.where('id').anyOf(targetIds).toArray()
-      return contacts
-    })
+  async getActiveContacts(fromId) {
+    const relations = await db.relations.where({ fromId }).toArray()
+    return Promise.all(relations.map((d) => this.getContact(d.id))).then(
+      (arr) => arr.filter((d) => d)
+    )
   }
 
-  async getContacts(id) {
-    const relations = await db.relations.where({ fromId: id }).toArray()
-    const targetIds = relations.map((d) => d.targetId)
-    const contacts = await db.users.where('id').anyOf(targetIds).toArray()
-    return contacts
+  async getContacts(fromId) {
+    const relations = await db.relations.where({ fromId }).toArray()
+    return Promise.all(relations.map((d) => this.getContact(d.id))).then(
+      (arr) => arr.filter((d) => d)
+    )
   }
 
-  async getContact(fromId, targetId) {
-    const relation = await this.db.relations.where({ fromId, targetId }).first()
-    const contact = await this.db.users.get(targetId)
+  async getContact(id) {
+    const relation = await this.db.relations.get(id)
+    if (!relation) return
+    const user = await this.db.users.get(relation.targetId)
     return {
-      ...contact,
+      ...user,
       ...relation,
     }
   }
 
-  async setContact(id, data) {}
-  async deleteContact(id) {
+  async deactiveContact(id) {
+    return this.db.relations.update(id, { active: false })
+  }
+
+  async activeContact(id) {
+    return this.db.relations.update(id, { active: true })
+  }
+
+  async addRelation(fromId, targetId) {
+    const user = await this.getUser(targetId)
+    return this.db.relations.put({ fromId, targetId, alias: user.nickname })
+  }
+
+  async deleteRelation(id) {
     return this.db.relations.delete(id)
+  }
+
+  async getRelation(id) {
+    return this.db.relations.get(id)
+  }
+
+  async setRelation(id, data) {
+    const { alias, character } = data
+    return this.db.relations.update(id, { alias, character })
+  }
+
+  async setCharacter(id, character) {
+    return this.setRelation(id, { character })
   }
 
   async getUser(id) {
     return this.db.users.get(id)
+  }
+
+  async getUsers() {
+    return this.db.users.toArray()
+  }
+
+  async getRelationUsers(fromId) {
+    if (!fromId) return []
+    const users = await this.getUsers()
+    const targetIds = await this.db.relations
+      .where({ fromId })
+      .toArray((arr) => arr.map((d) => d.targetId))
+    for (const user of users) {
+      user.inRelation = targetIds.includes(user.id)
+    }
+    return users
   }
 
   async getAvatar(id) {
@@ -49,23 +89,21 @@ class FakeServer {
     })
   }
 
-  async getMessages(fromId, targetId) {
-    if (!fromId || !targetId) return []
+  async getMessages(relationId) {
+    if (!relationId) return []
+    const { fromId, targetId } = await this.db.relations.get(relationId)
     return Promise.all([
       this.db.messages.where({ fromId, targetId }).toArray(),
       this.db.messages.where({ fromId: targetId, targetId: fromId }).toArray(),
-    ])
-      .then(([a, b]) => {
-        a.forEach((d) => (d.type = 'from'))
-        b.forEach((d) => (d.type = 'target'))
-        return [...a, ...b].sort((a, b) => a.time - b.time)
-      })
-      .catch(() => {
-        return []
-      })
+    ]).then(([a, b]) => {
+      a.forEach((d) => (d.type = 'from'))
+      b.forEach((d) => (d.type = 'target'))
+      return [...a, ...b].sort((a, b) => a.time - b.time)
+    })
   }
 
-  async sendMessage(fromId, targetId, message) {
+  async sendMessage(relationId, message) {
+    const { fromId, targetId } = await this.db.relations.get(relationId)
     return Promise.all([
       this.db.messages.put({
         fromId,
@@ -73,7 +111,7 @@ class FakeServer {
         message,
         time: Date.now(),
       }),
-      this.getCharacter(fromId, targetId).then(async (d) => {
+      this.getRelation(relationId).then(async (d) => {
         const character = d?.character || ''
         return chatWithOther(fromId + targetId, character, message).then(
           (res) => {
@@ -89,19 +127,12 @@ class FakeServer {
     ])
   }
 
-  async deleteAllMessages(fromId, targetId) {
+  async deleteAllMessages(relationId) {
+    const { fromId, targetId } = await this.db.relations.get(relationId)
     return Promise.all([
       this.db.messages.where({ fromId, targetId }).delete(),
       this.db.messages.where({ fromId: targetId, targetId: fromId }).delete(),
     ])
-  }
-
-  async getCharacter(fromId, targetId) {
-    return this.db.relations.where({ fromId, targetId }).first()
-  }
-
-  async setCharacter(id, character) {
-    return this.db.relations.update(id, { character })
   }
 }
 

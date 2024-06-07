@@ -2,24 +2,30 @@ import { Button, Descriptions, Input, Popconfirm, Space } from 'antd'
 import { EmptyInfo } from './EmptyInfo'
 import { server } from './db/server'
 import { useNavigate } from 'react-router-dom'
+import { EditRelation } from './EditRelation'
 
-export const AddressContent = ({ fromId, targetId, onDelete }) => {
-  const [contact, setContact] = useState(null)
+export const AddressContent = ({ contactId, onDelete, onRefresh }) => {
   const navigate = useNavigate()
+  const [contact, setContact] = useState()
+  const [editRelationVisible, setEditRelationVisible] = useState(false)
 
   useEffect(() => {
-    if (!targetId) return setContact(null)
-    server.getContact(fromId, targetId).then(setContact)
-  }, [fromId, targetId])
+    server.getContact(contactId).then(setContact)
+  }, [contactId])
 
   const handleDeleleContact = () => {
-    server.deleteContact(contact.id).then(() => {
-      onDelete(targetId)
-    })
+    onDelete(contact.id)
   }
-  const handleEditContact = () => {}
+  const handleEditContact = () => {
+    setEditRelationVisible(true)
+  }
   const handleChat = () => {
-    navigate('../talk', { state: { targetId } })
+    navigate('../talk', { state: { contactId: contactId } })
+  }
+  const handleEditRelationClosed = () => {
+    setEditRelationVisible(false)
+    server.getContact(contactId).then(setContact)
+    onRefresh()
   }
 
   return (
@@ -27,7 +33,7 @@ export const AddressContent = ({ fromId, targetId, onDelete }) => {
       {contact ? (
         <>
           <div className="flex gap-3">
-            <img src={contact.avatar} className="avatar xl" />
+            <img src={contact.avatar} className="chat-avatar xl" />
             <Descriptions title={contact.alias} column={1}>
               <Descriptions.Item label="Nickname">
                 {contact.nickname}
@@ -39,7 +45,7 @@ export const AddressContent = ({ fromId, targetId, onDelete }) => {
           </div>
           <div className="p-2">
             <p className="font-bold">Character</p>
-            <div className="text-sm">{contact.character}</div>
+            <div className="text-sm">{contact.character || '无'}</div>
           </div>
           <Space className="justify-end mt-5">
             <Popconfirm
@@ -51,9 +57,16 @@ export const AddressContent = ({ fromId, targetId, onDelete }) => {
             >
               <Button danger>Delete</Button>
             </Popconfirm>
-            {/* <Button onClick={handleEditContact}>Edit</Button> */}
+            <Button onClick={handleEditContact}>Edit</Button>
             <Button onClick={handleChat}>Chat</Button>
           </Space>
+
+          {editRelationVisible && (
+            <EditRelation
+              contactId={contactId}
+              onClose={handleEditRelationClosed}
+            ></EditRelation>
+          )}
         </>
       ) : (
         <EmptyInfo>

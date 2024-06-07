@@ -23,7 +23,7 @@ export const MessageManage = ({ fromId, targetId, onClose }) => {
   }, [messages])
 
   useEffect(() => {
-    server.getCharacter(fromId, targetId).then(setTarget)
+    server.getRelation(fromId, targetId).then(setTarget)
   }, [targetId])
 
   const refreshMessages = () => {
