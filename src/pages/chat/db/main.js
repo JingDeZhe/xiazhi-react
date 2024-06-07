@@ -12,10 +12,12 @@ import Dexie from 'dexie'
 import { pinyin } from 'pinyin-pro'
 export const db = new Dexie('chatDB')
 
-db.version(1).stores({
+db.version(3).stores({
   users: '&id,username,nickname',
   relations: '++id,[fromId+targetId],fromId,targetId,alias,status',
   messages: '++id,[fromId+targetId],fromId,targetId,time',
+
+  fileStore: '&name,file',
 })
 
 const FAKE_STORE_PREPARED = 'FAKE_STORE_PREPARED'

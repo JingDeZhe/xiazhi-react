@@ -26,6 +26,7 @@ export const chatWithOther = async (key, character, message) => {
 
 const historyMap = new Map()
 export const chatWithKimi = async (key, character, message) => {
+  if (message.startsWith('fileStore:')) return '……'
   let t = historyMap.get(key)
   if (!t) historyMap.set(key, (t = []))
   t.push({ role: 'user', content: message })

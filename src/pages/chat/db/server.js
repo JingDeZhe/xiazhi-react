@@ -136,6 +136,32 @@ class FakeServer {
       this.db.messages.where({ fromId: targetId, targetId: fromId }).delete(),
     ])
   }
+
+  async uploadFile(file) {
+    const { size, lastModified } = file
+    const name = `${size}${lastModified}`
+    const _file = await this.db.fileStore.get(name)
+    const desc = `fileStore:${name}`
+    if (_file) return desc
+    return this.db.fileStore.put({ name, file }).then(() => desc)
+  }
+
+  async readFile(desc) {
+    if (!desc.startsWith('fileStore:')) return '#'
+    return this.db.fileStore
+      .get(desc.slice(10))
+      .then((d) => readFileAsUrl(d.file))
+  }
+}
+
+const readFileAsUrl = (file) => {
+  return new Promise((resolve) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onloadend = () => {
+      resolve(reader.result)
+    }
+  })
 }
 
 export const server = new FakeServer()

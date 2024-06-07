@@ -14,8 +14,11 @@ export const TalkContent = ({ contactId }) => {
   const [messageManageVisible, setMessageManageVisible] = useState(false)
   const scrollbar = useRef(null)
 
-  const refreshMessages = () => {
-    return server.getMessages(contactId).then(setMessages)
+  const refreshMessages = async () => {
+    return server.getMessages(contactId).then((d) => {
+      setMessages(d)
+      setLoading(false)
+    })
   }
   useEffect(() => {
     server.getContact(contactId).then(setContact)
@@ -31,14 +34,7 @@ export const TalkContent = ({ contactId }) => {
 
   const handleSendMessage = (message) => {
     setLoading(true)
-    server.sendMessage(contactId, message).then(() => {
-      server
-        .getMessages(contactId)
-        .then(setMessages)
-        .then(() => {
-          setLoading(false)
-        })
-    })
+    server.sendMessage(contactId, message).then(refreshMessages)
   }
 
   const handleMessageManage = () => {
@@ -48,6 +44,18 @@ export const TalkContent = ({ contactId }) => {
   const handleCloseMessageManage = () => {
     setMessageManageVisible(false)
     refreshMessages()
+  }
+
+  const fileInput = useRef(null)
+  const handleUploadFile = () => {
+    fileInput.current.click()
+  }
+  const handleImageChange = (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+    server.uploadFile(file).then((desc) => {
+      server.sendMessage(contactId, desc).then(refreshMessages)
+    })
   }
 
   return (
@@ -93,12 +101,23 @@ export const TalkContent = ({ contactId }) => {
                         className="i-tabler-message-2"
                         onClick={handleMessageManage}
                       ></i>
+                      <i
+                        className="i-tabler-photo-scan text-normal"
+                        onClick={handleUploadFile}
+                      ></i>
                     </>
                   )}
                 ></MessageInput>
               </div>
             </Split>
           </Spin>
+          <input
+            ref={fileInput}
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            hidden
+          />
         </>
       ) : (
         <EmptyInfo>

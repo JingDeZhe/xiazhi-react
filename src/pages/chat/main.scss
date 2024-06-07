@@ -87,6 +87,9 @@
     }
     &-content {
       --at-apply: p-2 rounded text-dark relative shadow-sm max-w-[60%];
+      &.image {
+        --at-apply: p-0 overflow-hidden;
+      }
       &.from {
         --at-apply: bg-[#89D961];
         &::after {
