@@ -1,7 +1,9 @@
+import { Link } from 'react-router-dom'
+
 export const Home = () => {
   return (
     <div className="home p-2">
-      <a href="/chat">Chat</a>
+      <Link to="/chat">Chat</Link>
     </div>
   )
 }

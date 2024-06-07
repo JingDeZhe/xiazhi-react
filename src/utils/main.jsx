@@ -85,3 +85,7 @@ export const localGet = (k) => {
 export const localDel = (k) => {
   localStorage.removeItem(k)
 }
+
+export const appendBase = (p) => {
+  return import.meta.env.BASE_URL + p
+}

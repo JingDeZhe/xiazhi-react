@@ -3,11 +3,16 @@ import { chatRoute } from '../pages/chat/route'
 import { ErrorPage } from '../pages/ErrorPage'
 import { Home } from '@/pages/Home'
 
-export const router = createBrowserRouter([
+export const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: <Home />,
+      errorElement: <ErrorPage />,
+    },
+    chatRoute,
+  ],
   {
-    path: '/',
-    element: <Home />,
-    errorElement: <ErrorPage />,
-  },
-  chatRoute,
-])
+    basename: '/xiazhi-react',
+  }
+)

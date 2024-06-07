@@ -1,9 +1,10 @@
+import { appendBase } from '@/utils/main'
 import { server } from './db/server'
 import Markdown from 'react-markdown'
 
 export const MessageDisplay = ({ message }) => {
   const { message: content, type } = message
-  const [avatar, setAvatar] = useState('/img/avatar-0.jpg')
+  const [avatar, setAvatar] = useState(appendBase('/img/avatar-0.jpg'))
 
   useEffect(() => {
     server.getAvatar(message.fromId).then(setAvatar)
