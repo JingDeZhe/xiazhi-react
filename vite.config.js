@@ -24,9 +24,6 @@ export default defineConfig({
       ],
       dts: './auto-imports.d.ts',
     }),
-    cdn({
-      modules: ['react', 'react-dom', 'react-router-dom'],
-    }),
   ],
   resolve: {
     alias: {
