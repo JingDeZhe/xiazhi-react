@@ -108,8 +108,7 @@ export const TalkContent = ({ contactId }) => {
 
       {messageManageVisible && (
         <MessageManage
-          fromId={fromId}
-          targetId={targetId}
+          contactId={contactId}
           onClose={handleCloseMessageManage}
         ></MessageManage>
       )}

@@ -1,11 +1,12 @@
 import { localGet, localSet } from '@/utils/main'
 import { server } from './db/server'
-import { Button, Input, Popconfirm, Spin, message } from 'antd'
+import { Button, Popconfirm, Spin } from 'antd'
 import Draggable from 'react-draggable'
 import { MessageDisplay } from './MessageDisplay'
+import { toast } from 'react-toastify'
 
-export const MessageManage = ({ fromId, targetId, onClose }) => {
-  const [target, setTarget] = useState(null)
+export const MessageManage = ({ contactId, onClose }) => {
+  const [contact, setContact] = useState(null)
   const [loading, setLoading] = useState(false)
   const [messages, setMessages] = useState([])
   const nodeRef = useRef(null)
@@ -13,7 +14,7 @@ export const MessageManage = ({ fromId, targetId, onClose }) => {
 
   useEffect(() => {
     refreshMessages()
-  }, [fromId, targetId])
+  }, [contactId])
 
   useEffect(() => {
     if (scrollbar.current) {
@@ -23,21 +24,21 @@ export const MessageManage = ({ fromId, targetId, onClose }) => {
   }, [messages])
 
   useEffect(() => {
-    server.getRelation(fromId, targetId).then(setTarget)
-  }, [targetId])
+    server.getContact(contactId).then(setContact)
+  }, [contactId])
 
   const refreshMessages = () => {
     setLoading(true)
-    server.getMessages(fromId, targetId).then((d) => {
+    server.getMessages(contactId).then((d) => {
       setMessages(d)
       setLoading(false)
     })
   }
 
   const handleDeleleAllMessages = () => {
-    server.deleteAllMessages(fromId, targetId).then(() => {
+    server.deleteAllMessages(contactId).then(() => {
       refreshMessages()
-      message.success('Successful')
+      toast.success('Successful')
     })
   }
 
@@ -47,7 +48,7 @@ export const MessageManage = ({ fromId, targetId, onClose }) => {
     localSet(MESSAGE_MANAGE_POS, { x: data.x, y: data.y })
   }
 
-  if (!target) return <></>
+  if (!contact) return <></>
 
   return (
     <Draggable
@@ -60,7 +61,7 @@ export const MessageManage = ({ fromId, targetId, onClose }) => {
       <div className="message-manage full-ctn col-ctn" ref={nodeRef}>
         <i className="close-btn i-tabler-x" onClick={onClose}></i>
         <div className="mb-3 v-center p-2 handle">
-          <span>{target.alias}</span>
+          <span>{contact.alias}</span>
         </div>
         <Spin
           wrapperClassName="ctn-body full-spin"
