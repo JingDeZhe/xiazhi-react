@@ -3,6 +3,8 @@ import PinyinEngine from 'pinyin-engine'
 import { Menu, Item, useContextMenu } from 'react-contexify'
 import { useParams } from 'react-router-dom'
 import { RelationManage } from './RelationManage'
+import { server } from './db/server'
+import { toast } from 'react-toastify'
 
 export const AddressMenu = ({
   contacts,
@@ -30,13 +32,19 @@ export const AddressMenu = ({
   })
   let _menuId = ''
   const handleContactMenu = (e) => {
-    _menuId = e.currentTarget.dataset.id
+    _menuId = Number(e.currentTarget.dataset.id)
     showContactMenu({ event: e })
   }
   const handleContactMenuClick = ({ id }) => {
     if (id === 'chat') {
       onSelect(_menuId)
       onChat(_menuId)
+    } else if (id === 'pat') {
+      server.getRelation(_menuId).then(({ targetId }) => {
+        server.fakeAddMoment(targetId).then(() => {
+          toast.info('👏')
+        })
+      })
     } else if (id === 'delete') {
       onDelete(_menuId)
     }
@@ -75,6 +83,9 @@ export const AddressMenu = ({
       <Menu id={CONTACT_MENU}>
         <Item id="chat" onClick={handleContactMenuClick}>
           Chat
+        </Item>
+        <Item id="pat" onClick={handleContactMenuClick}>
+          Pat
         </Item>
         <Item id="delete" onClick={handleContactMenuClick}>
           Delete

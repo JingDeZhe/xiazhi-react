@@ -4,7 +4,7 @@ import Markdown from 'react-markdown'
 import { Image } from 'antd'
 
 export const MessageDisplay = ({ message }) => {
-  const { message: content, type } = message
+  const { content, type } = message
   const [avatar, setAvatar] = useState(appendBase('/img/avatar-0.jpg'))
   const isImageMessage = content.startsWith('fileStore:')
 

@@ -1,5 +1,4 @@
 import { server } from './db/server'
-import { useChatStore } from './store/main'
 import Split from 'react-split'
 import { MessageInput } from './MessageInput'
 import { Spin } from 'antd'

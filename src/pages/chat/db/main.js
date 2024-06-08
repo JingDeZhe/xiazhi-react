@@ -16,6 +16,7 @@ db.version(3).stores({
   users: '&id,username,nickname',
   relations: '++id,[fromId+targetId],fromId,targetId,alias,status',
   messages: '++id,[fromId+targetId],fromId,targetId,time',
+  moments: '++id,fromId,title,content,time',
 
   fileStore: '&name,file',
 })

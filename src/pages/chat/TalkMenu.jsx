@@ -22,7 +22,7 @@ export const TalkMenu = ({ contacts, contactId, onSelect, onRefresh }) => {
   })
   let _menuId = ''
   const handleContactMenu = (e) => {
-    _menuId = parseInt(e.currentTarget.dataset.id)
+    _menuId = Number(e.currentTarget.dataset.id)
     showContactMenu({ event: e })
   }
   const handleContactMenuClick = ({ id }) => {

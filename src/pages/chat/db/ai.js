@@ -2,9 +2,30 @@ import { localGet, localSet } from '@/utils/main'
 import ky from 'ky'
 
 const API_KEY = 'KIMI_API_KEY'
+export const chatWithOther = async (key, character, message) => {
+  prepareKey()
+  if (localGet(API_KEY)) {
+    return chatWithKimi(key, character, message)
+  } else {
+    return '缺少Kimi API Key……'
+  }
+}
+
+export const getMoment = async (key) => {
+  prepareKey()
+  if (localGet(API_KEY)) {
+    return chatWithKimi(
+      key,
+      '你是一个很会写朋友圈的人，别人经常会请你帮他们写朋友圈。',
+      '帮我写一篇朋友圈，不超过100字，另外不要朋友圈外的其它回答文字。'
+    )
+  } else {
+    return '缺少Kimi API Key……'
+  }
+}
 
 let isAsked = false
-export const chatWithOther = async (key, character, message) => {
+const prepareKey = () => {
   if (!isAsked && !localGet(API_KEY)) {
     const key = window.prompt(
       '请输入Kimi API Key以进行聊天，不然无法正常对话',
@@ -17,11 +38,6 @@ export const chatWithOther = async (key, character, message) => {
     }
   }
   isAsked = true
-  if (localGet(API_KEY)) {
-    return chatWithKimi(key, character, message)
-  } else {
-    return '缺少Kimi API Key……'
-  }
 }
 
 const historyMap = new Map()

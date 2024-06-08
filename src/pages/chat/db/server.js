@@ -1,4 +1,5 @@
-import { chatWithOther } from './ai'
+import { sample } from '@/utils/main'
+import { chatWithOther, getMoment } from './ai'
 import { db } from './main'
 
 const avatarCache = {}
@@ -104,23 +105,23 @@ class FakeServer {
     })
   }
 
-  async sendMessage(relationId, message) {
+  async sendMessage(relationId, content) {
     const { fromId, targetId } = await this.db.relations.get(relationId)
     return Promise.all([
       this.db.messages.put({
         fromId,
         targetId,
-        message,
+        content,
         time: Date.now(),
       }),
       this.getRelation(relationId).then(async (d) => {
         const character = d?.character || ''
-        return chatWithOther(fromId + targetId, character, message).then(
+        return chatWithOther(fromId + targetId, character, content).then(
           (res) => {
             return this.db.messages.put({
               fromId: targetId,
               targetId: fromId,
-              message: res,
+              content: res,
               time: Date.now() + 10,
             })
           }
@@ -151,6 +152,32 @@ class FakeServer {
     return this.db.fileStore
       .get(desc.slice(10))
       .then((d) => readFileAsUrl(d.file))
+  }
+
+  async getMoments(fromId) {
+    const targetIds = await this.db.relations
+      .where({ fromId })
+      .toArray((arr) => arr.map((d) => d.targetId))
+    return this.db.moments
+      .where('fromId')
+      .anyOf(targetIds)
+      .reverse()
+      .sortBy('time')
+  }
+
+  async addMoment(fromId, title, content) {
+    return this.db.moments.put({
+      fromId,
+      title,
+      content,
+      time: Date.now(),
+    })
+  }
+
+  async fakeAddMoment(fromId) {
+    return getMoment(fromId).then((d) => {
+      return this.addMoment(fromId, '日常', d)
+    })
   }
 }
 

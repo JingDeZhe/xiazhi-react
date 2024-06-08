@@ -85,10 +85,16 @@
     &.from {
       --at-apply: flex-row-reverse;
     }
+    &.moment {
+      --at-apply: bg-white p-2;
+    }
     &-content {
       --at-apply: p-2 rounded text-dark relative shadow-sm max-w-[60%];
       &.image {
         --at-apply: p-0 overflow-hidden;
+      }
+      &.moment {
+        --at-apply: shadow-none p-0 pl-2 max-w-initial;
       }
       &.from {
         --at-apply: bg-[#89D961];
@@ -101,7 +107,8 @@
           border-left-color: #89d961;
         }
       }
-      &.target {
+      &.target,
+      &.moment {
         --at-apply: bg-[#fff];
         &::after {
           content: '';
@@ -117,6 +124,10 @@
 
   .message-manage {
     --at-apply: bg-neutral-100 w-[600px] h-[600px];
+  }
+
+  .moment-content {
+    padding: 2rem 5rem;
   }
 
   .avatar-info {
